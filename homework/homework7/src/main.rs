@@ -9,7 +9,7 @@ Collaborators: none
 use std::f64::consts::PI;
 
 enum ShapeType {
-    Rectangle,
+    Rectangle(l : f64, w : f64), 
     Circle,
     Triangle,
 }
@@ -26,13 +26,7 @@ impl Shape {
             ShapeType::Circle => {
                 return 2.0 * shape.radius * PI ;
             }
-            _ => {
-                let mut tmp: f64 = 0.0;
-                for side in shape.sides {
-                    tmp += &side;
-                }
-                return tmp;
-            }
+            _ => Self::sum_sides(shape)
         }
     }
 
@@ -41,14 +35,25 @@ impl Shape {
             ShapeType::Circle => {
                 return f64::powf(shape.radius, 2.0) * PI ;
             }
-            _ => {
-                let mut tmp: f64 = 0.0;
-                for side in shape.sides {
-                    tmp += &side;
-                }
-                return tmp;
+            ShapeType::Triangle => { // Heron's Formula
+                let mut s : f64 = Self::sum_sides(shape);
+                s = s / 2.0 ;
+                return f64::sqrt(s * (s - &shape.sides[0]) * (s - &shape.sides[1]) * (s - &shape.sides[2]));
             }
+            _ => Self::sum_sides(shape)
         }
+    }
+
+    fn sum_sides(shape : Shape) -> f64 {
+        let mut tmp: f64 = 0.0;
+        for side in shape.sides {
+            tmp += &side;
+        }
+        return tmp;
+    }
+
+    fn doubleSize(shape: Shape) {
+
     }
 
 }
