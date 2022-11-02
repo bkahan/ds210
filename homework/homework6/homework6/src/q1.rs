@@ -1,4 +1,4 @@
-fn fib(n: u128) -> u128 {
+pub(crate) fn fib(n: u128) -> u128 {
     if n <= 1 {
         return n ;
     }
