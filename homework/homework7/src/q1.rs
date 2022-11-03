@@ -13,16 +13,9 @@ impl Shape {
         else {
             match shape.sides.len() {
                 2 => 4.0*shape.sides[0],  // unique case of rectangle
-                3 => { // triangle
-                    return Self::sum_sides(shape) ;
-                }
-                4 => { // rectangle
-                    return Self::sum_sides(shape);
-                },
-                _ => { // everything that cannot be defined as a shape (as of right now)
-                    println!("Not enough sides.");
-                    return 0.0;
-                },
+                3 => Self::sum_sides(shape),
+                4 => Self::sum_sides(shape),
+                _ => Self::greater_than4(),
             }
         }
     }
@@ -38,10 +31,7 @@ impl Shape {
                     let s: f64 = Self::sum_sides(shape) / 2.0;
                     return f64::sqrt(s * (s - shape.sides[0]) * (s - shape.sides[1]) * (s - shape.sides[2]));
                 }
-                _ => { // everything that cannot be defined as a shape (as of right now)
-                    println!("Not enough sides.");
-                    return 0.0;
-                },
+                _ => Self::greater_than4(),
             }
         }
     }
@@ -56,6 +46,11 @@ impl Shape {
 
     fn doubleSize(shape: Shape) {
 
+    }
+
+    fn greater_than4() -> f64 {
+        println!("Not enough sides.");
+        return 0.0;
     }
 
 }
