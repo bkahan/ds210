@@ -9,6 +9,9 @@ Collaborators: none
 mod q1 ;
 
 fn main() {
-    let tri1 = vec![1.0,2.0];
-    let s1 = q1::new_shape(tri1, 0.0, q1::ShapeType::Triangle);
+    let tri1 = vec![3.0, 4.0, 5.0];
+    let s1 = q1::new_shape(tri1, 0.0);
+
+    println!("{}", q1::Shape::sum_sides(&s1));
+    println!("{}", q1::Shape::area(&s1));
 }

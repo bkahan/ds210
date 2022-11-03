@@ -6,9 +6,9 @@ pub(crate) struct Shape {
 }
 
 impl Shape {
-    fn perimeter(shape: Shape) -> f64 {
+    fn perimeter(shape: &Shape) -> f64 {
         if shape.radius != 0.0  {
-            return 2.0*PI*shape.radius;
+            2.0*PI*shape.radius
         }
         else {
             match shape.sides.len() {
@@ -20,7 +20,7 @@ impl Shape {
         }
     }
 
-    fn area (shape: Shape) -> f64 {
+    pub(crate) fn area (shape: &Shape) -> f64 {
         if shape.radius != 0.0 {
             return f64::powf(shape.radius, 2.0) * PI;
         }
@@ -29,28 +29,28 @@ impl Shape {
                 2 => f64::powf(shape.sides[0],2.0),
                 3 => {
                     let s: f64 = Self::sum_sides(shape) / 2.0;
-                    return f64::sqrt(s * (s - shape.sides[0]) * (s - shape.sides[1]) * (s - shape.sides[2]));
+                    f64::sqrt(s * (s - shape.sides[0]) * (s - shape.sides[1]) * (s - shape.sides[2]))
                 }
                 _ => Self::greater_than4(),
             }
         }
     }
 
-    fn sum_sides(shape : Shape) -> f64 {
+    pub(crate) fn sum_sides(shape : &Shape) -> f64 {
         let mut tmp: f64 = 0.0;
-        for side in shape.sides {
-            tmp += &side;
+        for side in &shape.sides {
+            tmp += side;
         }
-        return tmp;
+        tmp
     }
 
-    fn doubleSize(shape: Shape) {
+    fn doubleSize(shape: &Shape) {
 
     }
 
     fn greater_than4() -> f64 {
         println!("Not enough sides.");
-        return 0.0;
+        0.0
     }
 
 }
