@@ -44,17 +44,32 @@ impl Shape {
         tmp
     }
 
-    fn doubleSize(shape: &Shape) {
-
+    pub(crate) fn double_size(shape: &mut Shape) { // defining doubling as doubling each length of side ex. [2,6,10] -> [4,12,20]
+        for x in 0..shape.sides.len() {
+            shape.sides[x] = shape.sides[x]*2.0 ;
+        }
     }
 
     fn greater_than4() -> f64 {
-        println!("Not enough sides.");
-        0.0
+        println!("Not enough sides or not a formatted as a shape.");
+        0.0 // for returns
     }
 
 }
 
+fn check_shape(sides : &Vec<f64>) -> bool {
+    let  a:f64  = sides.iter().sum();
+    return if sides.len() < 3 || a < 0.0 {
+        println!("Not a shape.");
+        false
+    } else {
+        true
+    }
+}
+
 pub(crate) fn new_shape(s: Vec<f64>, r: f64) -> Shape {
-    Shape { sides: s, radius: r }
+    match check_shape(&s) {
+        true => Shape { sides: s, radius: r },
+        false => Shape { sides: vec![0.0], radius : 0.0}
+    }
 }
