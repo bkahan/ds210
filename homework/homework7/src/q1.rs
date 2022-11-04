@@ -33,17 +33,6 @@ impl Polygon for Shape {
         }
     }
 
-    fn new_polygon_q2(side_length: f64, num_sides: u64, is_standard_polygon: bool) -> Shape {
-        if num_sides < 3 || side_length < 0.0 { // quick check for shape validity
-            panic!("Not a shape.")
-        }
-        let mut tmp: Vec<f64> = Vec::new();
-        for _ in 0..=num_sides {
-            tmp.push(side_length) // make a shape with n-side lengths, I know, this is bad
-        }
-        return Shape::new_polygon_q1(tmp, 0.0, is_standard_polygon);
-    }
-
     fn poly_area(shape: &Shape) -> f64 {
         if shape.radius != 0.0 {
             return f64::powf(shape.radius, 2.0) * PI;
@@ -104,6 +93,17 @@ impl Polygon for Shape {
             tmp += side;
         }
         tmp
+    }
+
+    fn new_polygon_q2(side_length: f64, num_sides: u64, is_standard_polygon: bool) -> Shape {
+        if num_sides < 3 || side_length < 0.0 { // quick check for shape validity
+            panic!("Not a shape.")
+        }
+        let mut tmp: Vec<f64> = Vec::new();
+        for _ in 0..=num_sides {
+            tmp.push(side_length) // make a shape with n-side lengths, I know, this is bad
+        }
+        return Shape::new_polygon_q1(tmp, 0.0, is_standard_polygon);
     }
 }
 

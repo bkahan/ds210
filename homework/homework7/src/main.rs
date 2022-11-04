@@ -54,5 +54,4 @@ fn main() {
     println!("2048-sided polygon with area: {}",q1::Shape::poly_area(&q2_2048));
     println!("65536-sided polygon with area: {}",q1::Shape::poly_area(&q2_65536));
 
-
 }
