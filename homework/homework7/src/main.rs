@@ -57,6 +57,4 @@ fn main() {
     println!("1024-sided polygon with area: {} and a circle with same radius has area: {}", homework_code::Shape::poly_area(&q2_1024), q2_1024_rad);
     println!("2048-sided polygon with area: {} and a circle with same radius has area: {}", homework_code::Shape::poly_area(&q2_2048), q2_2048_rad);
     println!("65536-sided polygon with area: {} and a circle with same radius has area: {}", homework_code::Shape::poly_area(&q2_65536), q2_65536_rad);
-
-
 }
