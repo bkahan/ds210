@@ -124,3 +124,27 @@ fn check_shape(sides: &Vec<f64>) -> bool {
     }
     true
 }
+
+#[test]
+#[should_panic]
+fn invalid_shape1() { // will not let you run the code if it is not a shape
+    Shape::new_polygon_q1(vec![0.0,-2.0], -100.0, true);
+}
+
+#[test]
+#[should_panic]
+fn invalid_shape2() { // negative side lengths
+    Shape::new_polygon_q1(vec![-1.0,2.0,4.0], 1.0, true);
+}
+
+#[test]
+#[should_panic]
+fn invalid_shape3() { // not a triangle
+    Shape::new_polygon_q1(vec![1.0,1.0,4.0], 1.0, true);
+}
+
+#[test]
+#[should_panic]
+fn invalid_shape4() { // not a triangle
+    Shape::new_polygon_q2(-1.0, 0, true);
+}
