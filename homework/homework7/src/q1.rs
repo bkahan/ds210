@@ -54,17 +54,24 @@ impl Shape {
         println!("Not enough sides or not a formatted as a shape.");
         0.0 // for returns
     }
-
 }
 
 fn check_shape(sides : &Vec<f64>) -> bool {
     let  a:f64  = sides.iter().sum();
-    return if sides.len() < 3 || a < 0.0 {
-        println!("Not a shape.");
-        false
-    } else {
-        true
+    if sides.len() < 3 || a < 0.0 {
+        panic!("Not a shape.")
     }
+    for x in sides {
+         if *x < 0.0 {
+             panic!("Negative Side Lengths")
+         }
+    }
+    if sides.len() == 3 {
+        if sides[0] + sides[1] >= sides[2] {
+            panic!("Not a triangle.")
+        }
+    }
+    return true
 }
 
 pub(crate) fn new_shape(s: Vec<f64>, r: f64) -> Shape {

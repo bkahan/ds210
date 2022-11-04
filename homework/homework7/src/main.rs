@@ -6,6 +6,8 @@ DS210
 Collaborators: none
  */
 
+extern crate core;
+
 mod q1 ;
 
 fn main() {
@@ -18,4 +20,7 @@ fn main() {
     q1::Shape::double_size(&mut s1);
     println!("{}", q1::Shape::area(&s1));
     println!("{}", q1::Shape::sum_sides(&s1));
+    let mut s2 = q1::new_shape(vec![1.0,2.0], 1.0); // will not let you run the code if it is not a shape
+    let mut s3 = q1::new_shape(vec![-1.0,2.0,4.0], 1.0); // will not let you run the code if it is not a shape
+
 }
