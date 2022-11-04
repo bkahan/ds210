@@ -6,6 +6,8 @@ DS210
 Collaborators: none
  */
 
+extern crate core;
+
 use crate::q1::Polygon;
 
 mod q1;
@@ -15,7 +17,7 @@ fn main() {
 
     // q1
     let tri1 = vec![3.0, 4.0, 5.0];
-    let mut s1 = q1::Shape::new_polygon(tri1, 0.0);
+    let mut s1 = q1::Shape::new_polygon_q1(tri1, 0.0, false);
 
     println!("{}", q1::Shape::sum_sides(&s1));
     println!("{}", q1::Shape::poly_area(&s1));

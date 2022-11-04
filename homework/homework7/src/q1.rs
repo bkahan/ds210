@@ -11,23 +11,41 @@ use std::f64::consts::PI;
 pub(crate) struct Shape {
     sides: Vec<f64>,
     radius: f64,
+    is_standard_polygon: bool
+}
+
+pub(crate) struct ShapeSideLen {
+    side_len: f64,
+    num_sides: u64,
 }
 
 pub(crate) trait Polygon { // question 2 implementation
-    fn new_polygon(sides :Vec<f64>, radius: f64) -> Shape;
+    fn new_polygon_q1(sides :Vec<f64>, radius: f64, is_standard_polygon: bool) -> Shape;
     fn poly_area (shape : &Shape) -> f64;
     fn poly_perimeter (shape: &Shape) -> f64;
     fn poly_radius (shape: &Shape) -> f64;
     fn poly_double_size (shape: &mut Shape);
     fn sum_sides(shape :&Shape) -> f64;
+    fn new_polygon_q2(side_length: f64, num_sides: u64, is_standard_polygon: bool ) -> Shape;
 }
 
 impl Polygon for Shape {
-    fn new_polygon(s: Vec<f64>, r: f64) -> Shape {
+    fn new_polygon_q1(s: Vec<f64>, r: f64, is_standard_polygon: bool) -> Shape {
         match check_shape(&s) {
-            true => Shape { sides: s, radius: r },
-            false => Shape { sides: vec![0.0], radius : 0.0} // return "empty" shape
+            true => Shape { sides: s, radius: r, is_standard_polygon },
+            false => Shape { sides: vec![0.0], radius : 0.0, is_standard_polygon } // return "empty" shape
         }
+    }
+
+    fn new_polygon_q2(side_length: f64, num_sides: u64, is_standard_polygon: bool ) -> Shape {
+        if num_sides < 3 || side_length < 0.0 { // quick check for shape validity
+            panic!("Not a shape.")
+        }
+        let mut tmp : Vec<f64> = Vec::new() ;
+        for _ in 0..=num_sides {
+            tmp.push(side_length) // make a shape with n-side lengths, I know, this is bad
+        }
+        return Shape::new_polygon_q1(tmp, 0.0, is_standard_polygon) ;
     }
 
     fn poly_area (shape: &Shape) -> f64 {
@@ -59,7 +77,15 @@ impl Polygon for Shape {
     }
 
     fn poly_radius(shape: &Shape) -> f64 {
-        todo!()
+        match shape.is_standard_polygon {
+            true => {
+                let s: f64 = shape.sides[0];
+                let n : f64 = shape.sides.len() as f64;
+                let m = 180.0 / n;
+                s / (2.0 * m.sin())
+            }
+            false => shape.radius
+        }
     }
 
     fn poly_double_size(shape: &mut Shape) { // defining doubling as doubling each length of side ex. [2,6,10] -> [4,12,20]
