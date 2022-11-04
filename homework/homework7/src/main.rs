@@ -13,14 +13,14 @@ fn main() {
 
     // q1
     let tri1 = vec![3.0, 4.0, 5.0];
-    let mut s1 = q1::new_shape(tri1, 0.0);
+    let mut s1 = q1::Polygon::new_polygon(tri1, 0.0);
 
-    println!("{}", q1::Shape::sum_sides(&s1));
-    println!("{}", q1::Shape::area(&s1));
+    println!("{}", q1::Polygon::sum_sides(&s1));
+    println!("{}", q1::Polygon::poly_area(&s1));
 
-    q1::Shape::double_size(&mut s1);
-    println!("{}", q1::Shape::area(&s1));
-    println!("{}", q1::Shape::sum_sides(&s1));
+    q1::Polygon::poly_double_size(&mut s1);
+    println!("{}", q1::Polygon::poly_area(&s1));
+    println!("{}", q1::Polygon::sum_sides(&s1));
 
 
    //let mut s2 = q1::new_shape(vec![1.0,2.0], 1.0); // will not let you run the code if it is not a shape

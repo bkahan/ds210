@@ -13,15 +13,40 @@ pub(crate) struct Shape {
     radius: f64,
 }
 
-pub(crate) trait Polygon {
-    fn poly_area (shape : &Shape) -> f64;
-    fn poly_perm (shape: &Shape) -> f64;
-    fn poly_radius (shape: &Shape) -> f64;
+pub(crate) trait Polygon { // question 2 implementation
     fn new_polygon(sides :Vec<f64>, radius: f64) -> Shape;
+    fn poly_area (shape : &Shape) -> f64;
+    fn poly_perimeter (shape: &Shape) -> f64;
+    fn poly_radius (shape: &Shape) -> f64;
+    fn poly_double_size (shape: &mut Shape);
+    fn sum_sides(shape :&Shape) -> f64;
 }
 
-impl Shape {
-    fn perimeter(shape: &Shape) -> f64 {
+impl Polygon for Shape {
+    fn new_polygon(s: Vec<f64>, r: f64) -> Shape {
+        match check_shape(&s) {
+            true => Shape { sides: s, radius: r },
+            false => Shape { sides: vec![0.0], radius : 0.0} // return "empty" shape
+        }
+    }
+
+    fn poly_area (shape: &Shape) -> f64 {
+        if shape.radius != 0.0 {
+            return f64::powf(shape.radius, 2.0) * PI;
+        }
+        else {
+            match shape.sides.len() {
+                2 => f64::powf(shape.sides[0],2.0),
+                3 => {
+                    let s: f64 = Self::sum_sides(shape) / 2.0;
+                    f64::sqrt(s * (s - shape.sides[0]) * (s - shape.sides[1]) * (s - shape.sides[2]))
+                }
+                _ => todo!() // Todo: replace with area for n-sided regular polygon
+            }
+        }
+    }
+
+    fn poly_perimeter(shape: &Shape) -> f64 {
         if shape.radius != 0.0  {
             2.0*PI*shape.radius
         }
@@ -33,39 +58,22 @@ impl Shape {
         }
     }
 
-    pub(crate) fn area (shape: &Shape) -> f64 {
-        if shape.radius != 0.0 {
-            return f64::powf(shape.radius, 2.0) * PI;
-        }
-        else {
-            match shape.sides.len() {
-                2 => f64::powf(shape.sides[0],2.0),
-                3 => {
-                    let s: f64 = Self::sum_sides(shape) / 2.0;
-                    f64::sqrt(s * (s - shape.sides[0]) * (s - shape.sides[1]) * (s - shape.sides[2]))
-                }
-                _ => Self::greater_than4(), // Todo: replace with area for n-sided regular polygon
-            }
-        }
+    fn poly_radius(shape: &Shape) -> f64 {
+        todo!()
     }
 
-    pub(crate) fn sum_sides(shape : &Shape) -> f64 {
-        let mut tmp: f64 = 0.0;
-        for side in &shape.sides {
-            tmp += side;
-        }
-        tmp
-    }
-
-    pub(crate) fn double_size(shape: &mut Shape) { // defining doubling as doubling each length of side ex. [2,6,10] -> [4,12,20]
+    fn poly_double_size(shape: &mut Shape) { // defining doubling as doubling each length of side ex. [2,6,10] -> [4,12,20]
         for x in 0..shape.sides.len() {
             shape.sides[x] = shape.sides[x]*2.0 ;
         }
     }
 
-    fn greater_than4() -> f64 { // Todo: deprecated
-        println!("Not enough sides or not a formatted as a shape.");
-        0.0 // for returns
+    fn sum_sides(shape : &Shape) -> f64 {
+        let mut tmp: f64 = 0.0;
+        for side in &shape.sides {
+            tmp += side;
+        }
+        tmp
     }
 }
 
@@ -85,11 +93,4 @@ fn check_shape(sides : &Vec<f64>) -> bool { // Todo: update for n-sided polygon
         }
     }
     return true
-}
-
-pub(crate) fn new_shape(s: Vec<f64>, r: f64) -> Shape {
-    match check_shape(&s) {
-        true => Shape { sides: s, radius: r },
-        false => Shape { sides: vec![0.0], radius : 0.0}
-    }
 }
