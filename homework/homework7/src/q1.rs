@@ -49,7 +49,7 @@ impl Polygon for Shape {
             return f64::powf(shape.radius, 2.0) * PI;
         }
         match shape.is_standard_polygon {
-            true => {
+            false => {
                 match shape.sides.len() {
                     2 => return f64::powf(shape.sides[0], 2.0),
                     3 => {
@@ -60,7 +60,7 @@ impl Polygon for Shape {
                     _ => panic!("Can't calculate anything higher than a rectangle. Use new_polygon_q2.")
                 }
             }
-            false => {
+            true => {
                 let n = shape.sides.len();
                 let s = shape.sides[0];
                 let omega = PI / n as f64;
@@ -82,14 +82,13 @@ impl Polygon for Shape {
     }
 
     fn poly_radius(shape: &Shape) -> f64 {
-        match shape.is_standard_polygon {
-            true => {
-                let s: f64 = shape.sides[0];
-                let n: f64 = shape.sides.len() as f64;
-                let m = 180.0 / n;
-                s / (2.0 * m.sin())
-            }
-            false => shape.radius
+        return if shape.radius != 0.0 {
+            let s: f64 = shape.sides[0];
+            let n: f64 = shape.sides.len() as f64;
+            let m = 180.0 / n;
+            s / (2.0 * m.sin())
+        } else {
+            shape.radius
         }
     }
 
