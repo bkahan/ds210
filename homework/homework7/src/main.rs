@@ -25,10 +25,6 @@ fn main() {
     println!("{}", homework_code::Shape::poly_area(&s1));
     println!("{}", homework_code::Shape::sum_sides(&s1));
 
-    //let mut s2 = q1::new_shape(vec![1.0,2.0], 1.0); // will not let you run the code if it is not a shape
-    // let mut s3 = q1::new_shape(vec![-1.0,2.0,4.0], 1.0); // negative side lengths
-    //let mut s4 = q1::new_shape(vec![1.0,1.0,4.0], 1.0); // not a triangle
-
     // q2
 
     let q2_6 = homework_code::Shape::new_polygon_q2(2.0, 6, true);
@@ -42,14 +38,25 @@ fn main() {
     let q2_2048 = homework_code::Shape::new_polygon_q2(2.0, 2048, true);
     let q2_65536 = homework_code::Shape::new_polygon_q2(2.0, 65536, true);
 
-    println!("6-sided polygon with area: {}", homework_code::Shape::poly_area(&q2_6));
-    println!("12-sided polygon with area: {}", homework_code::Shape::poly_area(&q2_12));
-    println!("24-sided polygon with area: {}", homework_code::Shape::poly_area(&q2_24));
-    println!("128-sided polygon with area: {}", homework_code::Shape::poly_area(&q2_128));
-    println!("256-sided polygon with area: {}", homework_code::Shape::poly_area(&q2_256));
-    println!("512-sided polygon with area: {}", homework_code::Shape::poly_area(&q2_512));
-    println!("1024-sided polygon with area: {}", homework_code::Shape::poly_area(&q2_1024));
-    println!("2048-sided polygon with area: {}", homework_code::Shape::poly_area(&q2_2048));
-    println!("65536-sided polygon with area: {}", homework_code::Shape::poly_area(&q2_65536));
+    let q2_6_rad = homework_code::Shape::poly_area(&q2_6);
+    let q2_12_rad = homework_code::Shape::poly_area(&q2_12);
+    let q2_24_rad = homework_code::Shape::poly_area(&q2_24);
+    let q2_128_rad = homework_code::Shape::poly_area(&q2_128);
+    let q2_256_rad = homework_code::Shape::poly_area(&q2_256);
+    let q2_512_rad = homework_code::Shape::poly_area(&q2_512);
+    let q2_1024_rad = homework_code::Shape::poly_area(&q2_1024);
+    let q2_2048_rad = homework_code::Shape::poly_area(&q2_2048);
+    let q2_65536_rad = homework_code::Shape::poly_area(&q2_65536);
+
+    println!("6-sided polygon with area: {} and a circle with same radius has area: {}", homework_code::Shape::poly_area(&q2_6), q2_6_rad);
+    println!("12-sided polygon with area: {} and a circle with same radius has area: {}", homework_code::Shape::poly_area(&q2_12), q2_12_rad);
+    println!("24-sided polygon with area: {} and a circle with same radius has area: {}", homework_code::Shape::poly_area(&q2_24), q2_24_rad);
+    println!("128-sided polygon with area: {} and a circle with same radius has area: {}", homework_code::Shape::poly_area(&q2_128), q2_128_rad);
+    println!("256-sided polygon with area: {} and a circle with same radius has area: {}", homework_code::Shape::poly_area(&q2_256), q2_256_rad);
+    println!("512-sided polygon with area: {} and a circle with same radius has area: {}", homework_code::Shape::poly_area(&q2_512), q2_512_rad);
+    println!("1024-sided polygon with area: {} and a circle with same radius has area: {}", homework_code::Shape::poly_area(&q2_1024), q2_1024_rad);
+    println!("2048-sided polygon with area: {} and a circle with same radius has area: {}", homework_code::Shape::poly_area(&q2_2048), q2_2048_rad);
+    println!("65536-sided polygon with area: {} and a circle with same radius has area: {}", homework_code::Shape::poly_area(&q2_65536), q2_65536_rad);
+
 
 }
