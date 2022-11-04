@@ -1,3 +1,11 @@
+/*
+Ben Kahan
+Homework 7
+DS210
+2 November 2022
+Collaborators: none
+ */
+
 use std::f64::consts::PI;
 
 pub(crate) struct Shape {
@@ -67,7 +75,7 @@ fn check_shape(sides : &Vec<f64>) -> bool {
          }
     }
     if sides.len() == 3 {
-        if sides[0] + sides[1] >= sides[2] {
+        if sides[0] + sides[1] <= sides[2] {
             panic!("Not a triangle.")
         }
     }
