@@ -6,9 +6,7 @@ DS210
 Collaborators: none
  */
 
-extern crate core;
-
-mod q1 ;
+mod q1;
 mod q2;
 
 fn main() {

@@ -13,6 +13,13 @@ pub(crate) struct Shape {
     radius: f64,
 }
 
+pub(crate) trait Polygon {
+    fn poly_area (shape : &Shape) -> f64;
+    fn poly_perm (shape: &Shape) -> f64;
+    fn poly_radius (shape: &Shape) -> f64;
+    fn new_polygon(sides :Vec<f64>, radius: f64) -> Shape;
+}
+
 impl Shape {
     fn perimeter(shape: &Shape) -> f64 {
         if shape.radius != 0.0  {
@@ -21,9 +28,7 @@ impl Shape {
         else {
             match shape.sides.len() {
                 2 => 4.0*shape.sides[0],  // unique case of rectangle
-                3 => Self::sum_sides(shape),
-                4 => Self::sum_sides(shape),
-                _ => Self::greater_than4(),
+                _ => Self::sum_sides(shape),
             }
         }
     }
@@ -39,7 +44,7 @@ impl Shape {
                     let s: f64 = Self::sum_sides(shape) / 2.0;
                     f64::sqrt(s * (s - shape.sides[0]) * (s - shape.sides[1]) * (s - shape.sides[2]))
                 }
-                _ => Self::greater_than4(),
+                _ => Self::greater_than4(), // Todo: replace with area for n-sided regular polygon
             }
         }
     }
@@ -58,13 +63,13 @@ impl Shape {
         }
     }
 
-    fn greater_than4() -> f64 {
+    fn greater_than4() -> f64 { // Todo: deprecated
         println!("Not enough sides or not a formatted as a shape.");
         0.0 // for returns
     }
 }
 
-fn check_shape(sides : &Vec<f64>) -> bool {
+fn check_shape(sides : &Vec<f64>) -> bool { // Todo: update for n-sided polygon
     let  a:f64  = sides.iter().sum();
     if sides.len() < 3 || a < 0.0 {
         panic!("Not a shape.")
