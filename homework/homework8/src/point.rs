@@ -7,19 +7,35 @@ Collaborators: none
  */
 
 pub mod point {
+    use std::ops::Neg;
+
     pub struct XYpoint<T> {
         x : T,
         y : T,
     }
 
-    pub trait Point {
+    pub trait Point: Copy + Neg {
         fn clockwise(&self) -> Box<Self>;
         fn counterclockwise(&self) -> Box<Self>;
         fn to_string(&self) -> String;
     }
 
+    impl<T> Clone for XYpoint<T> {
+        fn clone(&self) -> Self {
+            todo!()
+        }
+    }
+
+    impl<T> Neg for XYpoint<T> {
+        type Output = ();
+
+        fn neg(self) -> Self::Output {
+            todo!()
+        }
+    }
+
     impl<T> Point for XYpoint<T> {
-        pub fn clockwise(&self) -> Box<Self> {
+        fn clockwise(&self) -> Box<Self> {
             todo!()
         }
 
@@ -31,6 +47,7 @@ pub mod point {
             todo!()
         }
     }
+
 
 
 }
