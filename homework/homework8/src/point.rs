@@ -59,4 +59,12 @@ pub mod point {
             return Self { x: tmp.y, y : self.x };
         }
     }
+
+    #[test]
+    fn test_neg() {
+        let a = XYpoint {x: 1, y: -1};
+        let b = a.neg();
+        assert_eq!(- a.x, b.x);
+    }
+
 }
