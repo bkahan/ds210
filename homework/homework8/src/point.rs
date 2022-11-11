@@ -16,9 +16,8 @@ pub mod point {
     }
 
     pub trait Point {
-        fn clockwise(self) -> Self;
-        fn counterclockwise(self) -> Self;
-        fn to_string(self) -> String;
+        fn ccw(self) -> Self;
+        fn cw(self) -> Self;
     }
 
     impl<T:Neg<Output = T>> Neg for XYpoint<T> {
@@ -31,21 +30,33 @@ pub mod point {
 
     impl Point for XYpoint<f64> {
 
-        fn clockwise(self) -> Self {
+        fn ccw(self) -> Self {
             // matrix: [[0,1],[-1,0]]
             let tmp = self::XYpoint::neg(self);
 
             return Self { x: self.y, y : tmp.x };
         }
 
-        fn counterclockwise(self) -> Self {
+        fn cw(self) -> Self {
             // matrix: [[0,-1],[1,0]]
             return Self { x: self.y, y : self.x };
         }
+    }
 
-        fn to_string(self) -> String {
-            todo!()
+    impl Point for XYpoint<i32> {
+
+        fn ccw(self) -> Self {
+            // matrix: [[0,1],[-1,0]]
+            let tmp = self::XYpoint::neg(self);
+
+            return Self { x: self.y, y : tmp.x };
         }
 
+        fn cw(self) -> Self {
+            // matrix: [[0,-1],[1,0]]
+            let tmp = self::XYpoint::neg(self);
+
+            return Self { x: tmp.y, y : self.x };
+        }
     }
 }
