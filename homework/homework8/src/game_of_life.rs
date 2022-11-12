@@ -6,23 +6,23 @@ DS210
 Collaborators: none
  */
 
+/*
+general idea:
+make a board with is a graph with each square connected to each other
+set each square to be unreachable
+init game with init coords, set those squares as reachable and set as alive
+calculate neighbors for each cell, skipping unreachable only (ie, count dead)
+update board by adjusting based on if statement in problem
+make new board from old one being updated
+iterate 9 more times
+
+fancy thing to do:
+print the board in ascii
+ */
+
 pub mod gol {
 
-    pub mod game_engine {
-        /*
-        general idea:
-        make a board with is a graph with each square connected to each other
-        set each square to be unreachable
-        init game with init coords, set those squares as reachable and set as alive
-        calculate neighbors for each cell, skipping unreachable only (ie, count dead)
-        update board by adjusting based on if statement in problem
-        make new board from old one being updated
-        iterate 9 more times
-
-        fancy thing to do:
-        print the board in ascii
-         */
-    }
+    pub mod game_engine {}
 
     pub mod game {
 
@@ -58,6 +58,10 @@ pub mod gol {
         }
 
         impl Board {
+            fn iterate_board(&mut self) {
+                self.iteration_num = self.iteration_num + 1;
+            }
+
             pub fn new_game(size: i32) -> Board {
                 let mut tmp = Vec::new();
                 for _ in 0..=size {
