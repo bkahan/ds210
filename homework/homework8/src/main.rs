@@ -33,5 +33,17 @@ fn main() {
 
     let game = game::new_game(16);
 
+    let a = vec![0,1];
+    let b = vec![1,2];
+    let c = vec![2,0];
+    let d = vec![2,1];
+    let e = vec![2,2];
+
+    let coords = vec![a, b,c,d,e];
+
+    game::init_game(coords, game);
+
+
+
 
 }

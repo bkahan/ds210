@@ -11,12 +11,11 @@ pub mod gol {
     pub mod game_engine {}
 
     pub mod game {
-        use std::ops::Index;
+
 
         struct Cell {
             is_alive: bool,
         }
-
 
 
         pub struct Board {
@@ -47,9 +46,9 @@ pub mod gol {
                 let y = coord.pop();
                 let x = coord.pop();
 
-                let mut game_index = game.graph.get_mut(x.unwrap() as usize) ;
+                let game_index = game.graph.get_mut(x.unwrap() as usize) ;
 
-                let mut cell = game_index.unwrap().get_mut(y.unwrap() as usize);
+                let cell = game_index.unwrap().get_mut(y.unwrap() as usize);
 
                 cell.unwrap().is_alive = true;
 
