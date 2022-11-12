@@ -8,16 +8,16 @@ Collaborators: none
 
 pub mod gol {
 
-    pub mod game_engine {
-
-
-    }
+    pub mod game_engine {}
 
     pub mod game {
+        use std::ops::Index;
 
         struct Cell {
             is_alive: bool,
         }
+
+
 
         pub struct Board {
             graph: Vec<Vec<Cell>>,
@@ -42,7 +42,19 @@ pub mod gol {
             };
         }
 
-        
+        pub fn init_game(coordinates: Vec<Vec<i32>>, mut game: Board) {
+            for mut coord in coordinates {
+                let y = coord.pop();
+                let x = coord.pop();
 
+                let mut game_index = game.graph.get_mut(x.unwrap() as usize) ;
+
+                let mut cell = game_index.unwrap().get_mut(y.unwrap() as usize);
+
+                cell.unwrap().is_alive = true;
+
+            }
+
+        }
     }
 }
