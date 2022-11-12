@@ -11,7 +11,7 @@ mod game_of_life;
 
 use point::point::{Point, XYpoint};
 
-use game_of_life::gol::{game, game_engine};
+use game_of_life::gol::game;
 
 fn main() {
 
@@ -31,7 +31,7 @@ fn main() {
 
     // Question 2
 
-    let game = game::new_game(16);
+    let game = game::Board::new_game(16);
 
     let a = vec![0,1];
     let b = vec![1,2];
@@ -41,7 +41,7 @@ fn main() {
 
     let coords = vec![a, b,c,d,e];
 
-    game::init_game(coords, game);
+    game::Board::init_game(coords, game);
 
 
 
