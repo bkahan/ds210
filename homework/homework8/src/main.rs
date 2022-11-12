@@ -6,9 +6,12 @@ DS210
 Collaborators: none
  */
 
-use crate::point::point::{Point, XYpoint};
-
 mod point;
+mod game_of_life;
+
+use point::point::{Point, XYpoint};
+
+use game_of_life::gol::{game, game_engine};
 
 fn main() {
 
@@ -25,4 +28,10 @@ fn main() {
     println!("Point B: ({}, {}):", c.x, c.y);
     println!("CW: ({},{}), CCW: ({},{})", f.x, f.y, g.x, g.y);
     println!("Hello, world!");
+
+    // Question 2
+
+    let game = game::new_game(16);
+
+
 }
