@@ -10,7 +10,7 @@ import numpy as np
 import random
 
 rng = np.random.default_rng()
-tmp = rng.integers(low = 0,high = 100, size=1000)
+tmp = rng.integers(low = -100,high = 100, size=1000)
 
 
 file = open("src/data.txt", "w")
