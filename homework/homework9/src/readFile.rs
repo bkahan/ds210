@@ -6,9 +6,7 @@ DS210
 Collaborators: none
 */
 
-use std::fs;
-
-pub mod read_file {
+pub(crate) mod read_file {
     use std::fs::File;
     use std::io::{BufRead, BufReader};
 
@@ -27,7 +25,6 @@ pub mod read_file {
             );
             tmp_res.push(res);
         }
-
         Ok(tmp_res)
     }
 }

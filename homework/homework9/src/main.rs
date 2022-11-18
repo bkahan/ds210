@@ -14,7 +14,12 @@ mod readFile;
 mod tree;
 
 fn main() {
-    let path = "/Users/benkahan/Documents/School/ds210/homework/homework9/src/pagerank_data.txt";
+    let path = "/Users/benkahan/Documents/School/ds210/homework/homework9/src/data.txt";
 
-    let res = readFile::read_file::file2vectuple(path);
+    let mut res = readFile::read_file::file2vectuple(path);
+    let tmp = res.unwrap();
+
+    for x in 0..100 {
+        println!("{},{}", tmp[x].0, tmp[x].1)
+    }
 }
