@@ -37,6 +37,7 @@ pub mod tree {
     }
 
     impl Node {
+
         pub fn new_tree() -> Node {
             Node {
                 error: (0.0, 1.0),
@@ -45,62 +46,30 @@ pub mod tree {
             }
         }
 
-        pub fn init_tree(tree: &mut Node, path: &str) {
-            let res = readFile::read_file::file2vectuple(path);
-            let data = res.unwrap();
+        fn insert(tree: &mut Node, data : &Vec<(i32, i32)>, split_point : i32) {
 
             let mut left  = &mut tree.left_child;
             let mut right = &mut tree.right_child;
 
+
             for data_point in data.iter() {
                 let x = *data_point;
 
-
-
-
-
-
-                if x.0 < 0 {
+                if x.0 < split_point {
                     // initialize tree to split if x < 0 -> 0, x > 0 -> 1
                     left.push(x)
                 } else {
                     right.push(x)
                 }
             }
-            tree::Node::calculate_error(tree);
         }
 
-        pub fn recalculate_tree(tree: &Node, num_iters : i32) -> Vec<Node> {
+        pub fn init_tree(tree: &mut Node, path: &str) {
+            let res = readFile::read_file::file2vectuple(path);
+            let data = res.unwrap();
 
-            let right = tree.right_child.clone();
-            let mut left = tree.left_child.clone();
-
-            let mut result = Vec::<Node>::new();
-
-            for x in 0..right.len() { // recreate dataset
-                left.push(right[x])
-            }
-
-            for x in 0..num_iters {
-
-                let mut tmp_tree = tree::Node::new_tree();
-
-                for data_point in left.iter() {
-                    let dpoint = *data_point;
-
-                    if dpoint.0 <= x as i32 {
-                        tmp_tree.left_child.push(dpoint)
-                    } else {
-                        tmp_tree.right_child.push(dpoint)
-                    }
-                }
-
-                result.push(tmp_tree);
-
-            }
-
-            todo!()
-
+            tree::Node::insert(tree,&data, 0 );
+            tree::Node::calculate_error(tree);
         }
 
         pub fn calculate_error(tree: &mut Node) -> (f32, f32) {
@@ -122,12 +91,43 @@ pub mod tree {
                 right_sum = right_sum + tmp.1 as f32;
             }
 
-            let left_err = 0.0 - (left_sum / left.len() as f32);
+            let left_err = 1.0 - (left_sum / left.len() as f32);
             let right_err = 1.0 - (right_sum / left.len() as f32);
 
             tree.error = (left_err, right_err) ;
 
             return (left_err, right_err);
+        }
+
+        pub fn iterate_tree(tree : &mut Node, num_iters : i32) -> Vec<Node> {
+
+            let mut data = Vec::<(i32, i32)>::new();
+            let mut result = Vec::<Node>::new();
+
+            for tuple in &tree.left_child {
+                data.push(*tuple)
+            }
+
+            for tuple in &tree.right_child {
+                data.push(*tuple)
+            }
+
+            for iter in 0..num_iters {
+                let mut tmp_tree = tree::Node::new_tree();
+                tree::Node::insert(&mut tmp_tree, &data, iter);
+                tree::Node::calculate_error(&mut tmp_tree);
+                result.push(tmp_tree)
+            }
+
+            for iter in 0..num_iters { // https://stackoverflow.com/questions/69170796/rust-negative-for-loops
+                let mut tmp_tree = tree::Node::new_tree();
+                tree::Node::insert(&mut tmp_tree, &data, - iter);
+                tree::Node::calculate_error(&mut tmp_tree);
+                result.push(tmp_tree)
+            }
+            
+            return result;
+
         }
     }
 }
