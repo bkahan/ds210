@@ -32,15 +32,25 @@ pub mod tree {
 
     pub struct Node {
         error: (f32, f32),
+        split_point: i32,
         left_child: Vec<(i32, i32)>, // todo fix this
         right_child: Vec<(i32, i32)>,
     }
 
     impl Node {
 
+        pub fn get_error(node: &Node) -> (f32, f32) {
+            return node.error;
+        }
+
+        pub fn get_split_point(node : &Node) -> i32 {
+            return node.split_point;
+        }
+
         pub fn new_tree() -> Node {
             Node {
                 error: (0.0, 1.0),
+                split_point : 0,
                 left_child: Vec::<(i32, i32)>::new(),
                 right_child: Vec::<(i32, i32)>::new(),
             }
@@ -68,7 +78,7 @@ pub mod tree {
             let res = readFile::read_file::file2vectuple(path);
             let data = res.unwrap();
 
-            tree::Node::insert(tree,&data, 0 );
+            tree::Node::insert(tree,&data, tree.split_point);
             tree::Node::calculate_error(tree);
         }
 
@@ -116,6 +126,7 @@ pub mod tree {
                 let mut tmp_tree = tree::Node::new_tree();
                 tree::Node::insert(&mut tmp_tree, &data, iter);
                 tree::Node::calculate_error(&mut tmp_tree);
+                tmp_tree.split_point = iter;
                 result.push(tmp_tree)
             }
 
@@ -123,9 +134,10 @@ pub mod tree {
                 let mut tmp_tree = tree::Node::new_tree();
                 tree::Node::insert(&mut tmp_tree, &data, - iter);
                 tree::Node::calculate_error(&mut tmp_tree);
+                tmp_tree.split_point = iter;
                 result.push(tmp_tree)
             }
-            
+
             return result;
 
         }
