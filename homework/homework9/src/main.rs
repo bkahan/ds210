@@ -16,10 +16,13 @@ mod tree;
 fn main() {
     let path = "/Users/benkahan/Documents/School/ds210/homework/homework9/src/data.txt";
 
-    let mut res = readFile::read_file::file2vectuple(path);
-    let tmp = res.unwrap();
+    let mut treee = tree::tree::Node::new_tree() ;
+    tree::tree::Node::init_tree(&mut treee, path);
 
-    for x in 0..100 {
-        println!("{},{}", tmp[x].0, tmp[x].1)
-    }
+    let error = tree::tree::Node::calculate_error(&treee);
+
+
+
+
+
 }

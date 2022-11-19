@@ -28,17 +28,15 @@ return lowest error
 
 pub mod tree {
     use crate::readFile;
-    use std::ops::Deref;
-    use std::ptr;
 
-    struct Node {
+    pub struct Node {
         error: (i32, i32),
         left_child: Vec<(i32, i32)>, // todo fix this
         right_child: Vec<(i32, i32)>,
     }
 
     impl Node {
-        fn new_tree() -> Node {
+        pub fn new_tree() -> Node {
             Node {
                 error: (0, 1),
                 left_child: Vec::<(i32, i32)>::new(),
@@ -46,12 +44,12 @@ pub mod tree {
             }
         }
 
-        fn init_tree(tree: Node, path: &str) {
-            let mut res = readFile::read_file::file2vectuple(path);
+        pub fn init_tree(tree: &mut Node, path: &str) {
+            let res = readFile::read_file::file2vectuple(path);
             let data = res.unwrap();
 
-            let mut left = tree.left_child;
-            let mut right = tree.right_child;
+            let mut left  = &mut tree.left_child;
+            let mut right = &mut tree.right_child;
 
             for data_point in data.iter() {
                 let x = *data_point;
@@ -65,32 +63,32 @@ pub mod tree {
             }
         }
 
-        fn recalculate_tree(tree: Node) {
+        pub fn recalculate_tree(tree: Node) {
+            todo!()
 
-            
         }
 
-        fn calculate_error(tree: Node) -> (i32, i32) {
+        pub fn calculate_error(tree: &Node) -> (f32, f32) {
             // return error
 
-            let left = tree.left_child; // try to get to 0
-            let right = tree.right_child; // try to get to 1
+            let left = &tree.left_child; // try to get to 0
+            let right = &tree.right_child; // try to get to 1
 
-            let mut left_sum = 0;
-            let mut right_sum = 0;
+            let mut left_sum :f32 = 0.0;
+            let mut right_sum : f32 = 0.0;
 
             for data_point in left.iter() {
                 let tmp = *data_point;
-                left_sum = left_sum + tmp.1;
+                left_sum = left_sum + tmp.1 as f32;
             }
 
             for data_point in right.iter() {
                 let tmp = *data_point;
-                right_sum = right_sum + tmp.1;
+                right_sum = right_sum + tmp.1 as f32;
             }
 
-            let left_err = 0 - (left_sum / left.len() as i32);
-            let right_err = 1 - (right_sum / left.len() as i32);
+            let left_err = 0.0 - (left_sum / left.len() as f32);
+            let right_err = 1.0 - (right_sum / left.len() as f32);
 
             return (left_err, right_err);
         }
