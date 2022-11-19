@@ -8,7 +8,7 @@ Collaborators: none
 
 /*
 take the tree
-use a determination function to split based on xi <- how do I split the data?
+use a determination function to split based on xi <- calculate gini on left, gini on right, go with lower value
 get vector from that node
 push new data onto that node
 done
@@ -28,9 +28,10 @@ return lowest error
 
 pub mod tree {
     use crate::readFile;
+    use crate::tree::tree;
 
     pub struct Node {
-        error: (i32, i32),
+        error: (f32, f32),
         left_child: Vec<(i32, i32)>, // todo fix this
         right_child: Vec<(i32, i32)>,
     }
@@ -38,7 +39,7 @@ pub mod tree {
     impl Node {
         pub fn new_tree() -> Node {
             Node {
-                error: (0, 1),
+                error: (0.0, 1.0),
                 left_child: Vec::<(i32, i32)>::new(),
                 right_child: Vec::<(i32, i32)>::new(),
             }
@@ -54,6 +55,11 @@ pub mod tree {
             for data_point in data.iter() {
                 let x = *data_point;
 
+
+
+
+
+
                 if x.0 < 0 {
                     // initialize tree to split if x < 0 -> 0, x > 0 -> 1
                     left.push(x)
@@ -61,14 +67,43 @@ pub mod tree {
                     right.push(x)
                 }
             }
+            tree::Node::calculate_error(tree);
         }
 
-        pub fn recalculate_tree(tree: Node) {
+        pub fn recalculate_tree(tree: &Node, num_iters : i32) -> Vec<Node> {
+
+            let right = tree.right_child.clone();
+            let mut left = tree.left_child.clone();
+
+            let mut result = Vec::<Node>::new();
+
+            for x in 0..right.len() { // recreate dataset
+                left.push(right[x])
+            }
+
+            for x in 0..num_iters {
+
+                let mut tmp_tree = tree::Node::new_tree();
+
+                for data_point in left.iter() {
+                    let dpoint = *data_point;
+
+                    if dpoint.0 <= x as i32 {
+                        tmp_tree.left_child.push(dpoint)
+                    } else {
+                        tmp_tree.right_child.push(dpoint)
+                    }
+                }
+
+                result.push(tmp_tree);
+
+            }
+
             todo!()
 
         }
 
-        pub fn calculate_error(tree: &Node) -> (f32, f32) {
+        pub fn calculate_error(tree: &mut Node) -> (f32, f32) {
             // return error
 
             let left = &tree.left_child; // try to get to 0
@@ -89,6 +124,8 @@ pub mod tree {
 
             let left_err = 0.0 - (left_sum / left.len() as f32);
             let right_err = 1.0 - (right_sum / left.len() as f32);
+
+            tree.error = (left_err, right_err) ;
 
             return (left_err, right_err);
         }
