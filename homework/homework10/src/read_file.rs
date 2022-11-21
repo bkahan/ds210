@@ -10,17 +10,17 @@ pub(crate) mod read_file {
     use std::fs::File;
     use std::io::{BufRead, BufReader};
 
-    pub fn file2vectuple(filepath: &str) -> Result<Vec<(i32, i32)>, Box<dyn std::error::Error>> {
+    pub fn file2vectuple(filepath: &str) -> Result<Vec<(usize, usize)>, Box<dyn std::error::Error>> {
         let data = File::open(filepath)?;
         let reader = BufReader::new(data);
 
-        let mut tmp_res: Vec<(i32, i32)> = Vec::new();
+        let mut tmp_res: Vec<(usize, usize)> = Vec::new();
 
         for line in reader.lines() {
             let tmp = line.unwrap();
             let mut split_lines: Vec<&str> = tmp.split(' ').collect();
 
-            let mut res: (i32, i32) = (0, 0);
+            let mut res: (usize, usize) = (0, 0);
 
             if split_lines.len() == 1  { // make the first node be the dimensions todo: make this better, this is shit code
                 res.0 = split_lines[0].parse().unwrap();
