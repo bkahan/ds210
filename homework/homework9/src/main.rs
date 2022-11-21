@@ -10,7 +10,7 @@ mod read_file;
 mod tree;
 
 fn main() {
-    let path = "/Users/benkahan/Documents/School/ds210/homework/homework9/src/data.txt"; // I needed to use the absolute path for my computer
+    let path = "/Users/benkahan/Documents/School/ds210/homework/homework9/src/pagerank_data.txt"; // I needed to use the absolute path for my computer
     //let path = "data.txt";
 
     let mut treee = tree::tree::Node::new_tree();
