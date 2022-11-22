@@ -6,17 +6,22 @@ DS210
 Collaborators: none
 */
 
+use rand::Rng;
+
 pub mod graph {
+    use rand::Rng;
+
     pub struct Graph {
         // code adapted from lec27, attempted to make it as "mine" as possible
         vert_count: i16,
         adj_list: Vec<Vec<usize>>,
         adj_matrix: Vec<Vec<bool>>,
-        /*
-        standard graph rep
-        1D array of vec references
-        indexed by number (no need for fancy label stuff)
-         */
+    }
+
+    pub struct VertexData {
+        vertex_id : i16,
+        page_rank: f32,
+        times_visited: i16,
     }
 
     impl Graph {
@@ -32,6 +37,10 @@ pub mod graph {
             }
 
             return Graph { vert_count: num_vertex, adj_list: list_tmp, adj_matrix: mat_tmp };
+        }
+
+        pub fn get_vert_count(graph : Graph) -> i16 {
+            graph.vert_count
         }
 
         pub fn insert_data(data: &Vec<(usize, usize)>, mut graph: Graph) {
@@ -50,23 +59,43 @@ pub mod graph {
              */
         }
 
-        pub fn pagerank(graph : Graph ) {
+        pub fn pagerank(mut graph : Graph ) -> Vec<Vec<VertexData>> {
+
+            let mut res : Vec<Vec<VertexData>> = Vec::new();
+
+            for vertex in graph.adj_list {
+                if vertex.len() == 0  {
+                    let mut rand = rand::thread_rng();
+                    let index : usize = rand.gen_range(0..graph.vert_count) as usize;
+
+                    match res[index].len() {
+                        1 => {
+                            res[index].get(0).
+                        }
+                        _ => {}
+                    }
+
+                    res[index].push(VertexData {
+                        vertex_id : index as i16,
+                        page_rank: 0.0,
+                        times_visited: 0
+                    })
+
+
+
+
+                    //let rand_vert = rand::
+                }
+            }
             todo!()
 
             /*
-                Without going into details of how exactly PageRank is defined, we can compute its
-                approximation by simulating 100 random independent walks from each vertex. Each
-                random walk should consist of 100 random steps as described above. Our
-                approximation of PageRank for a vertex v is then the fraction of the random walks that
-                terminated at v (i.e., the number of random walks that terminated at v divided by 100n,
-                where n is the number of vertices). Notice that the sum of PageRank across all vertices
-                should add to 1.0 (modulo any precision errors in floating point arithmetic).
 
                 If v has no outgoing edges, jump to a uniformly random vertex in the entire
                 graph
                 If v has at least one outgoing edge:
                     With probability 9/10, select uniformly at random one of them and follow it. <- use rand::distributions::Bernoulli to do this
-                    Otherwise—i.e., with probability 1/10—jump to a vertex selected uniformly at random from the entire graph
+                    Otherwise, jump to a vertex selected uniformly at random from the entire graph
 
 
                 pagerank of vertex v := (# walks that terminate at v) / 100 * (num of v)
