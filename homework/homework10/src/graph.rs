@@ -9,8 +9,11 @@ Collaborators: none
 use rand::Rng;
 
 pub mod graph {
+    use std::ops::AddAssign;
     use rand::Rng;
 
+
+    #[derive(Clone, Debug)]
     pub struct Graph {
         // code adapted from lec27, attempted to make it as "mine" as possible
         vert_count: i16,
@@ -18,11 +21,14 @@ pub mod graph {
         adj_matrix: Vec<Vec<bool>>,
     }
 
-    pub struct VertexData {
-        vertex_id : i16,
-        page_rank: f32,
-        times_visited: i16,
-    }
+    #[derive(Copy, Clone, Debug)]
+    pub struct VertexData (i16, f32, i16);
+
+    // pub struct VertexData {
+    //     vertex_id : i16,
+    //     page_rank: f32,
+    //     times_visited: i16,
+    // }
 
     impl Graph {
         pub fn new_graph(num_vertex: i16) -> Graph {
@@ -59,9 +65,27 @@ pub mod graph {
              */
         }
 
-        pub fn pagerank(mut graph : Graph ) -> Vec<Vec<VertexData>> {
+        pub fn pagerank_calculate(mut graph: Graph, mut vertexDataList: Vec<VertexData>) {
 
-            let mut res : Vec<Vec<VertexData>> = Vec::new();
+            let s : f32 = graph.vert_count as f32;
+
+            for vertex in vertexDataList {
+
+            }
+
+
+
+
+
+
+
+
+            todo!()
+        }
+
+        pub fn pagerank(graph : Graph ) -> Vec<VertexData> { // this should be done recursively
+
+            let mut res: Vec<Vec<VertexData>> = vec![Vec::new(); graph.vert_count as usize];
 
             for vertex in graph.adj_list {
                 if vertex.len() == 0  {
@@ -70,21 +94,57 @@ pub mod graph {
 
                     match res[index].len() {
                         1 => {
-                            res[index].get(0).
+                            let mut tmp = res[index].pop().unwrap();
+                            tmp.2 = tmp.2 + 1;
                         }
-                        _ => {}
+                        _ => {
+                            res[index].push(VertexData (index as i16, 0.0, 1))
+                        }
+                    }
+                } else {
+                    let mut rand = rand::thread_rng();
+                    let probability : bool = rand.gen_ratio(9, 10) ;
+
+                    match probability {
+                        true => {
+                            // select from vertex.len
+                            let rand_neighbor = rand.gen_range(0..vertex.len());
+                            match res[rand_neighbor].len() {
+                                1 => {
+                                    let mut tmp = res[rand_neighbor].pop().unwrap();
+                                    tmp.2 = tmp.2 + 1;
+                                }
+                                _ => {
+                                    res[rand_neighbor].push(VertexData (rand_neighbor as i16, 0.0, 1))
+                                }
+                            }
+                        },
+                        false => {
+
+                            let rand_vert = rand.gen_range(0..graph.vert_count) as usize;
+                            match res[rand_vert].len() {
+                                1 => {
+                                    let mut tmp = res[rand_vert].pop().unwrap();
+                                    tmp.2 = tmp.2 + 1;
+                                }
+                                _ => {
+                                    res[rand_vert].push(VertexData (rand_vert as i16, 0.0, 1))
+                                }
+                            }
+
+
+                        }
                     }
 
-                    res[index].push(VertexData {
-                        vertex_id : index as i16,
-                        page_rank: 0.0,
-                        times_visited: 0
-                    })
+
+                    // if prob >
+
+                    // do the second part of page rank algo here
 
 
 
 
-                    //let rand_vert = rand::
+
                 }
             }
             todo!()
