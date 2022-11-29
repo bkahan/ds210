@@ -7,9 +7,10 @@ Collaborators: none
 */
 
 pub mod graph {
+    use std::fmt;
+    use std::fmt::Formatter;
     use rand::Rng;
     use crate::graph::graph;
-
 
     pub struct Graph {
         // code adapted from lec27, attempted to make it as "mine" as possible
@@ -24,6 +25,13 @@ pub mod graph {
     //     vertex_id : i16,
     //     page_rank: f32,
     //     times_visited: i16,
+
+    impl fmt::Display for VertexData {
+
+        fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+            write!(f,"Vertex #{}: PageRank: {}, times_visited: {}", self.0, self.1, self.2)
+        }
+    }
 
     impl Graph {
         pub fn new_graph(num_vertex: i16) -> Graph {
@@ -46,9 +54,12 @@ pub mod graph {
             return vertex.1;
         }
 
-        pub fn pagerank_calculate(graph: &Graph, vertex_data_list: &mut Vec<Vec<VertexData>>) {
-            let s: f32 = graph.vert_count as f32;
+        pub fn get_vertex_id(vertex: &VertexData) -> i16 {
+            return vertex.0;
+        }
 
+        fn pagerank_calculate(graph: &Graph, vertex_data_list: &mut Vec<Vec<VertexData>>) {
+            let s: f32 = graph.vert_count as f32;
             for vertex in vertex_data_list {
                 for vert in vertex {
                     vert.1 = vert.2 as f32 / (s * 100.0) ;
@@ -56,13 +67,7 @@ pub mod graph {
             }
         }
 
-
-        pub fn pagerank_helper(result: &mut Vec<Vec<VertexData>>, index: usize) {
-
-            print!("index: {}, result[index].len(): {}", index, result[index].len());
-            println!("\n");
-            println!("len of vec[0] :{}",result.get_mut(0).unwrap().len() );
-            println!("\n");
+        fn pagerank_helper(result: &mut Vec<Vec<VertexData>>, index: usize) {
 
             match result[index].len() {
 
@@ -80,7 +85,7 @@ pub mod graph {
             }
         }
 
-        pub fn pagerank(original_graph: &Graph) -> Vec<Vec<VertexData>> { // this should be done recursively, this is shit code :(
+        pub fn pagerank(original_graph: &Graph) -> Vec<VertexData> { // this should be done recursively, this is shit code :(
 
             let mut res: Vec<Vec<VertexData>> = vec![Vec::<VertexData>::new(); original_graph.vert_count as usize];
             let graph = &original_graph.adj_list;
@@ -106,55 +111,28 @@ pub mod graph {
                     }
                 }
             }
+            graph::Graph::pagerank_calculate(original_graph, &mut res);
+
+            return graph::Graph::sort_by_pagerank(&mut res);
+        }
+
+        fn sort_by_pagerank(vector: &mut  Vec<Vec<VertexData>>) -> Vec<VertexData> {
+
+            let mut res = Vec::<VertexData>::new();
+
+            for vec in vector {
+                res.push(vec.pop().unwrap());
+            }
+
+            res.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap());
+
             return res;
 
-            /*
+        }
 
-                If v has no outgoing edges, jump to a uniformly random vertex in the entire
-                graph
-                If v has at least one outgoing edge:
-                    With probability 9/10, select uniformly at random one of them and follow it. <- use rand::distributions::Bernoulli to do this
-                    Otherwise, jump to a vertex selected uniformly at random from the entire graph
-
-
-                pagerank of vertex v := (# walks that terminate at v) / 100 * (num of v)
-                check and verify: sum of (pagerank of v_i) = 1 <- test function
-
-                vertex_data_structs:
-                - vertex id : float
-                - page_rank : float
-                - times visited: int
-
-                page_rank_traverse(graph) returns vector of vertex_data_structs
-
-                set res : vector<vertex_data_structs> => new vector
-
-                set
-
-                for vec in vector in vector<vertex>:
-                    push new vertex_data_struct with:
-                        vertex id = vec id
-                        page rank = 0
-                        times visited = 0
-
-                for _ in 0..100:
-                    for v in vertex in graph:
-                        set m : vec<vertex> to be the immediate neighbors of v
-                        if m is empty:
-                            randomly pick vertex in graph
-                        if m.len() >= 1:
-                            with prob = .9 => randomly pick vertex w from m
-                                                get id of m, index res[id of m], increment times visited
-                            otherwise => randomly pick vertex q in graph
-                                                get id of q, index res[id of q], increment times visited
-
-
-                page_rank_calculate(vertex_data_structs):
-                    set s to # of nodes in graph
-                    for ver in vertex_data_structs:
-                        set ver.page_rank to (ver.times visited / s ) : float
-
-             */
+        pub fn top_five(vector: &Vec<VertexData> ) -> Vec<VertexData>  {
+            let top = vector[0..5].to_vec();
+            return top;
         }
     }
 }
