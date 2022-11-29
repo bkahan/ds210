@@ -6,14 +6,13 @@ DS210
 Collaborators: none
 */
 
-use std::fmt::Display;
-
 mod read_file;
 mod graph;
 
 fn main() {
 
-    let path = "/Users/benkahan/Documents/School/ds210/homework/homework10/src/test.txt";
+    let path = "/Users/benkahan/Documents/School/ds210/homework/homework10/src/pagerank_data.txt";
+    //let path = "pagerank_data.txt";
     let a = read_file::read_file::file2vectuple(path);
     let mut ans = a.unwrap();
     let num_verts = ans.get(0).unwrap() ;
@@ -21,14 +20,13 @@ fn main() {
 
     graph::graph::Graph::insert_data(&mut ans, &mut graph);
 
-    let mut praying = graph::graph::Graph::pagerank(& graph);
+    let praying = graph::graph::Graph::pagerank(& graph);
 
-    for vertex in &praying  {
+    println!("Top 5 Vertices Are: ");
+    let top = graph::graph::Graph::top_five(&praying);
+    for vertex in &top  {
         println!("{}", vertex);
     }
-
-    graph::graph::Graph::top_five(&praying);
-
 }
 
 /*

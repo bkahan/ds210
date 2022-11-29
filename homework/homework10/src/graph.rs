@@ -11,12 +11,12 @@ pub mod graph {
     use std::fmt::Formatter;
     use rand::Rng;
     use crate::graph::graph;
+    use crate::read_file::read_file;
 
     pub struct Graph {
         // code adapted from lec27, attempted to make it as "mine" as possible
         vert_count: i16,
         adj_list: Vec<Vec<usize>>,
-        adj_matrix: Vec<Vec<bool>>,
     }
 
     #[derive(Copy, Clone, Debug)]
@@ -27,9 +27,8 @@ pub mod graph {
     //     times_visited: i16,
 
     impl fmt::Display for VertexData {
-
         fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-            write!(f,"Vertex #{}: PageRank: {}, times_visited: {}", self.0, self.1, self.2)
+            write!(f, "Vertex #{}: PageRank: {}, times_visited: {}", self.0, self.1, self.2)
         }
     }
 
@@ -37,8 +36,7 @@ pub mod graph {
         pub fn new_graph(num_vertex: i16) -> Graph {
             return Graph {
                 vert_count: num_vertex,
-                adj_list: vec![Vec::<usize>::new() ; num_vertex as usize],
-                adj_matrix: vec![Vec::<bool>::new() ; num_vertex as usize]
+                adj_list: vec![Vec::<usize>::new(); num_vertex as usize],
             };
         }
 
@@ -46,39 +44,28 @@ pub mod graph {
             data.remove(0); // removing the created tuple that defines the number of vertices
             for (_source, _target) in data {
                 graph.adj_list[*_source].push(*_target);
-                graph.adj_matrix[*_source].push(true);
             }
-        }
-
-        pub fn get_pagerank(vertex: &VertexData) -> f32 {
-            return vertex.1;
-        }
-
-        pub fn get_vertex_id(vertex: &VertexData) -> i16 {
-            return vertex.0;
         }
 
         fn pagerank_calculate(graph: &Graph, vertex_data_list: &mut Vec<Vec<VertexData>>) {
             let s: f32 = graph.vert_count as f32;
             for vertex in vertex_data_list {
                 for vert in vertex {
-                    vert.1 = vert.2 as f32 / (s * 100.0) ;
+                    vert.1 = vert.2 as f32 / (s * 100.0);
                 }
             }
         }
 
         fn pagerank_helper(result: &mut Vec<Vec<VertexData>>, index: usize) {
-
             match result[index].len() {
-
                 0 => {
                     result.get_mut(index).unwrap().push(VertexData(index as i16, 0.0, 1));
-                },
+                }
                 1 => {
                     let mut tmp = result[index].pop().unwrap(); // this is so stupid there must be a better way
                     tmp.2 = tmp.2 + 1;
                     result[index].push(tmp);
-                },
+                }
                 _ => {
                     panic!("WTF")
                 }
@@ -116,8 +103,7 @@ pub mod graph {
             return graph::Graph::sort_by_pagerank(&mut res);
         }
 
-        fn sort_by_pagerank(vector: &mut  Vec<Vec<VertexData>>) -> Vec<VertexData> {
-
+        fn sort_by_pagerank(vector: &mut Vec<Vec<VertexData>>) -> Vec<VertexData> {
             let mut res = Vec::<VertexData>::new();
 
             for vec in vector {
@@ -125,14 +111,62 @@ pub mod graph {
             }
 
             res.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap());
+            res.reverse();
 
             return res;
-
         }
 
-        pub fn top_five(vector: &Vec<VertexData> ) -> Vec<VertexData>  {
+        pub fn top_five(vector: &Vec<VertexData>) -> Vec<VertexData> {
             let top = vector[0..5].to_vec();
             return top;
         }
+    }
+
+    #[test]
+    fn sum_pagerank_test() {
+        let path = "/Users/benkahan/Documents/School/ds210/homework/homework10/src/test.txt";
+        //let path = "test.txt";
+        let a = read_file::file2vectuple(path);
+        let mut ans = a.unwrap();
+        let num_verts = ans.get(0).unwrap();
+        let mut graph = graph::graph::Graph::new_graph(num_verts.0 as i16);
+
+        graph::graph::Graph::insert_data(&mut ans, &mut graph);
+
+        let vector = graph::graph::Graph::pagerank(&graph);
+
+        let mut sum: f32 = 0.0;
+
+        for v in vector {
+            sum += v.1;
+        }
+        println!("{}", sum);
+
+        let range = 0.9..1.0;
+        assert!(range.contains(&sum));
+    }
+
+    #[test]
+    fn sum_pagerank_test2() {
+        let path = "/Users/benkahan/Documents/School/ds210/homework/homework10/src/test2.txt";
+        //let path = "test2.txt";
+        let a = read_file::file2vectuple(path);
+        let mut ans = a.unwrap();
+        let num_verts = ans.get(0).unwrap();
+        let mut graph = graph::graph::Graph::new_graph(num_verts.0 as i16);
+
+        graph::graph::Graph::insert_data(&mut ans, &mut graph);
+
+        let vector = graph::graph::Graph::pagerank(&graph);
+
+        let mut sum: f32 = 0.0;
+
+        for v in vector {
+            sum += v.1;
+        }
+        println!("{}", sum);
+
+        let range = 0.9..1.0;
+        assert!(range.contains(&sum));
     }
 }
