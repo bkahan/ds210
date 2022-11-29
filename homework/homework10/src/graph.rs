@@ -6,14 +6,11 @@ DS210
 Collaborators: none
 */
 
-use rand::Rng;
-
 pub mod graph {
-    use std::ops::AddAssign;
     use rand::Rng;
+    use crate::graph::graph;
 
 
-    #[derive(Clone, Debug)]
     pub struct Graph {
         // code adapted from lec27, attempted to make it as "mine" as possible
         vert_count: i16,
@@ -22,132 +19,94 @@ pub mod graph {
     }
 
     #[derive(Copy, Clone, Debug)]
-    pub struct VertexData (i16, f32, i16);
+    pub struct VertexData(i16, f32, i16);
 
-    // pub struct VertexData {
     //     vertex_id : i16,
     //     page_rank: f32,
     //     times_visited: i16,
-    // }
 
     impl Graph {
         pub fn new_graph(num_vertex: i16) -> Graph {
-            let mut list_tmp: Vec<Vec<usize>> = Vec::new();
-            let mut mat_tmp: Vec<Vec<bool>> = Vec::new();
-
-            for _ in 0..=num_vertex {
-                let tmp = Vec::<usize>::new();
-                let tmp_mat = Vec::<bool>::new();
-                list_tmp.push(tmp);
-                mat_tmp.push(tmp_mat);
-            }
-
-            return Graph { vert_count: num_vertex, adj_list: list_tmp, adj_matrix: mat_tmp };
+            return Graph {
+                vert_count: num_vertex,
+                adj_list: vec![Vec::<usize>::new() ; num_vertex as usize],
+                adj_matrix: vec![Vec::<bool>::new() ; num_vertex as usize]
+            };
         }
 
-        pub fn get_vert_count(graph : Graph) -> i16 {
-            graph.vert_count
-        }
-
-        pub fn insert_data(data: &Vec<(usize, usize)>, mut graph: Graph) {
+        pub fn insert_data(data: &mut Vec<(usize, usize)>, graph: &mut Graph) {
+            data.remove(0); // removing the created tuple that defines the number of vertices
             for (_source, _target) in data {
                 graph.adj_list[*_source].push(*_target);
                 graph.adj_matrix[*_source].push(true);
             }
         }
 
-        pub fn traverse() { // todo: not actually sure if I need this
-            todo!()
-
-            /*
-            takes a graph
-            walk the graph
-             */
+        pub fn get_pagerank(vertex: &VertexData) -> f32 {
+            return vertex.1;
         }
 
-        pub fn pagerank_calculate(mut graph: Graph, mut vertexDataList: Vec<VertexData>) {
+        pub fn pagerank_calculate(graph: &Graph, vertex_data_list: &mut Vec<Vec<VertexData>>) {
+            let s: f32 = graph.vert_count as f32;
 
-            let s : f32 = graph.vert_count as f32;
-
-            for vertex in vertexDataList {
-
-            }
-
-
-
-
-
-
-
-
-            todo!()
-        }
-
-        pub fn pagerank(graph : Graph ) -> Vec<VertexData> { // this should be done recursively
-
-            let mut res: Vec<Vec<VertexData>> = vec![Vec::new(); graph.vert_count as usize];
-
-            for vertex in graph.adj_list {
-                if vertex.len() == 0  {
-                    let mut rand = rand::thread_rng();
-                    let index : usize = rand.gen_range(0..graph.vert_count) as usize;
-
-                    match res[index].len() {
-                        1 => {
-                            let mut tmp = res[index].pop().unwrap();
-                            tmp.2 = tmp.2 + 1;
-                        }
-                        _ => {
-                            res[index].push(VertexData (index as i16, 0.0, 1))
-                        }
-                    }
-                } else {
-                    let mut rand = rand::thread_rng();
-                    let probability : bool = rand.gen_ratio(9, 10) ;
-
-                    match probability {
-                        true => {
-                            // select from vertex.len
-                            let rand_neighbor = rand.gen_range(0..vertex.len());
-                            match res[rand_neighbor].len() {
-                                1 => {
-                                    let mut tmp = res[rand_neighbor].pop().unwrap();
-                                    tmp.2 = tmp.2 + 1;
-                                }
-                                _ => {
-                                    res[rand_neighbor].push(VertexData (rand_neighbor as i16, 0.0, 1))
-                                }
-                            }
-                        },
-                        false => {
-
-                            let rand_vert = rand.gen_range(0..graph.vert_count) as usize;
-                            match res[rand_vert].len() {
-                                1 => {
-                                    let mut tmp = res[rand_vert].pop().unwrap();
-                                    tmp.2 = tmp.2 + 1;
-                                }
-                                _ => {
-                                    res[rand_vert].push(VertexData (rand_vert as i16, 0.0, 1))
-                                }
-                            }
-
-
-                        }
-                    }
-
-
-                    // if prob >
-
-                    // do the second part of page rank algo here
-
-
-
-
-
+            for vertex in vertex_data_list {
+                for vert in vertex {
+                    vert.1 = vert.2 as f32 / (s * 100.0) ;
                 }
             }
-            todo!()
+        }
+
+
+        pub fn pagerank_helper(result: &mut Vec<Vec<VertexData>>, index: usize) {
+
+            print!("index: {}, result[index].len(): {}", index, result[index].len());
+            println!("\n");
+            println!("len of vec[0] :{}",result.get_mut(0).unwrap().len() );
+            println!("\n");
+
+            match result[index].len() {
+
+                0 => {
+                    result.get_mut(index).unwrap().push(VertexData(index as i16, 0.0, 1));
+                },
+                1 => {
+                    let mut tmp = result[index].pop().unwrap(); // this is so stupid there must be a better way
+                    tmp.2 = tmp.2 + 1;
+                    result[index].push(tmp);
+                },
+                _ => {
+                    panic!("WTF")
+                }
+            }
+        }
+
+        pub fn pagerank(original_graph: &Graph) -> Vec<Vec<VertexData>> { // this should be done recursively, this is shit code :(
+
+            let mut res: Vec<Vec<VertexData>> = vec![Vec::<VertexData>::new(); original_graph.vert_count as usize];
+            let graph = &original_graph.adj_list;
+
+            for _ in 0..100 {
+                for vertex in graph {
+                    if vertex.len() == 0 {
+                        let index: usize = rand::thread_rng().gen_range(0..original_graph.vert_count) as usize;
+                        graph::Graph::pagerank_helper(&mut res, index);
+                    } else {
+                        let probability: bool = rand::thread_rng().gen_ratio(9, 10);
+                        match probability {
+                            true => {
+                                // select from vertex.len
+                                let rand_neighbor = rand::thread_rng().gen_range(0..vertex.len());
+                                graph::Graph::pagerank_helper(&mut res, rand_neighbor);
+                            }
+                            false => {
+                                let rand_vert = rand::thread_rng().gen_range(0..original_graph.vert_count) as usize;
+                                graph::Graph::pagerank_helper(&mut res, rand_vert);
+                            }
+                        }
+                    }
+                }
+            }
+            return res;
 
             /*
 
@@ -195,19 +154,6 @@ pub mod graph {
                     for ver in vertex_data_structs:
                         set ver.page_rank to (ver.times visited / s ) : float
 
-
-
-
-
-
-
-
-
-
-             */
-
-            /*
-            todo: not sure what to do here
              */
         }
     }

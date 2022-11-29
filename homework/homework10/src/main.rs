@@ -6,26 +6,31 @@ DS210
 Collaborators: none
 */
 
+extern crate core;
 mod read_file;
 mod graph;
 
-use rand::prelude::*;
+
 
 
 fn main() {
 
-    let path = "/Users/benkahan/Documents/School/ds210/homework/homework10/src/pagerank_data.txt";
+    let path = "/Users/benkahan/Documents/School/ds210/homework/homework10/src/test.txt";
     let a = read_file::read_file::file2vectuple(path);
-    let ans = a.unwrap();
+    let mut ans = a.unwrap();
+    let num_verts = ans.get(0).unwrap() ;
+    let mut graph = graph::graph::Graph::new_graph(num_verts.0 as i16);
 
-    let mut test = Vec::<u16>::new();
-    println!("{}", test.len());
+    graph::graph::Graph::insert_data(&mut ans, &mut graph);
 
-    test.push(5);
-    test.pop();
-    println!("{}", test.len());
-    test.push(5);
-    println!("{}", test.len());
+    let mut praying = graph::graph::Graph::pagerank(& graph);
+    graph::graph::Graph::pagerank_calculate(&graph, &mut praying);
+    for vertex in praying  {
+        for v in vertex {
+            println!("{}", graph::graph::Graph::get_pagerank(&v) );
+        }
+    }
+
 
 
 
