@@ -6,7 +6,8 @@ DS210
 Collaborators: none
 */
 
-pub(crate) mod read_csv {
+pub(crate) mod read_csv { // todo: modify for new csv file
+
     use std::fs::File;
     use std::io::{BufRead, BufReader};
 
@@ -37,3 +38,30 @@ pub(crate) mod read_csv {
         Ok(tmp_res)
     }
 }
+
+/*
+
+header of csv data:
+
+Movie_Title 0,Year 1, Director 2,Actors 3,Rating 4,Runtime(Mins) 5,Censor 6,Total_Gross 7,main_genre 8,side_genre 9
+
+do not need:
+runtime (5)
+censor (6)
+
+we want:
+line[0], line[1], line[2], line[3], line[4], line[7], line[8], line[9]
+
+data types:
+0: str
+1: u16
+2: str
+3: vec<str>
+4: f16
+7: f16
+8,9: (str1, str2)
+
+FIND by movie_title
+
+
+ */
