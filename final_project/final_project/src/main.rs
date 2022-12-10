@@ -10,6 +10,17 @@ mod read_file;
 mod graph;
 
 fn main() {
+
+    let path = "/Users/benkahan/Documents/School/ds210/final_project/final_project/data/data.csv";
+    //let path = "../data/data.csv";
+
+    let result = read_file::read_csv::file2node(path);
+
+    result.unwrap();
+
+
+
+
     println!("Hello, world!");
 }
 

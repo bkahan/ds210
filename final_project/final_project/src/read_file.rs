@@ -6,36 +6,77 @@ DS210
 Collaborators: none
 */
 
+
 pub(crate) mod read_csv { // todo: modify for new csv file
 
     use std::fs::File;
     use std::io::{BufRead, BufReader};
+    use std::net::Shutdown::Read;
+    use crate::graph::graph;
+    use csv;
+    use csv::Reader;
 
-    pub fn file2vectuple(filepath: &str) -> Result<Vec<(usize, usize)>, Box<dyn std::error::Error>> { // adapted from my hw9
+    pub fn file2node(filepath: &str) -> Result<Vec<graph::NodeData>, Box<dyn std::error::Error>> { // adapted from my hw9
+        let mut reader = Reader::from_path(filepath)?;
+        let mut tmp_res: Vec<graph::NodeData> = Vec::new();
+
+        for res in reader.records() {
+            // let line: graph::NodeData = res?;
+            // tmp_res.push(line);
+            let record = res?;
+            println!("{:?}", record.get(2));
+
+
+            tmp_res.push(graph::NodeData {
+                node_id: 0,
+                movie_title: record.get(0).unwrap().parse().unwrap(),
+                year: record.get(1).unwrap().parse().unwrap(),
+                director: record.get(2).unwrap().parse().unwrap(),
+                main_actors: Vec::new(), // todo FIX THIS
+                rating: record.get(4).unwrap().parse().unwrap(),
+                total_gross: record.get(7).unwrap().parse().unwrap(),
+                genres: (record.get(8).unwrap().parse().unwrap(), record.get(9).unwrap().parse().unwrap())
+            })
+        }
+        Ok(tmp_res)
+
+
+
+
+        /*
         let data = File::open(filepath)?;
         let reader = BufReader::new(data);
 
-        let mut tmp_res: Vec<(usize, usize)> = Vec::new();
+        let mut tmp_res: Vec<graph::NodeData> = Vec::new();
+
+        let mut count = 0;
 
         for line in reader.lines() {
-            let tmp = line.unwrap();
-            let split_lines: Vec<&str> = tmp.split(',').collect();
+            let tmp: String = line.unwrap();
+            let split_lines: Vec<&str> = tmp.split(',').collect() ;
+            count+=1;
 
-            let mut res: (usize, usize) = (0, 0);
-
-            match split_lines.len() { // todo: still kinda shit but better
-                1 => {
-                    res.0 = split_lines[0].parse().unwrap();
-                    res.1 = res.0;
+            match split_lines[0] { // todo: still kinda shit but better
+                "Movie_Title" => {
+                    continue
                 },
                 _ => {
-                    res.0 = split_lines[0].parse().unwrap();
-                    res.1 = split_lines[1].parse().unwrap();
+                    tmp_res.push(graph::NodeData {
+                        node_id: count,
+                        movie_title: split_lines[0],
+                        year: split_lines[1].parse().unwrap(),
+                        director: split_lines[2],
+                        main_actors: vec![],
+                        rating: split_lines[4].parse().unwrap(),
+                        total_gross: split_lines[7].parse().unwrap(),
+                        genres: (split_lines[8], split_lines[9])
+                    });
                 }
             }
-            tmp_res.push(res);
         }
         Ok(tmp_res)
+
+         */
     }
 }
 

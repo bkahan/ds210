@@ -6,15 +6,23 @@ DS210
 Collaborators: none
 */
 
-pub mod graph {
 
-    #[derive(Copy, Clone)]
-    pub struct Node {
+pub(crate) mod graph {
 
+    #[derive(Debug)]
+    pub struct NodeData {
+        pub node_id : i16,
+        pub movie_title: String,
+        pub year: i16,
+        pub director: String,
+        pub main_actors: Vec<&'static str>,
+        pub rating: f32,
+        pub total_gross: f32,
+        pub genres: (String, String),
     }
 
 
-    impl Node  {
+    impl NodeData {
 
         fn insert_data() {
             todo!()
