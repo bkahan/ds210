@@ -9,16 +9,30 @@ Collaborators: none
 
 pub(crate) mod read_csv { // todo: modify for new csv file
 
+    use std::collections::hash_map::DefaultHasher;
+    use std::fs::read;
     use crate::graph::graph;
     use csv::Reader;
+    use std::hash::{Hash, Hasher};
+    use std::ops::AddAssign;
+
+    fn calculate_hash<T: Hash>(t: &T) -> i16 {
+        let mut s = DefaultHasher::new();
+        t.hash(&mut s);
+        s.finish() as i16
+    }
 
     pub fn file2node(filepath: &str) -> Result<Vec<graph::NodeData>, Box<dyn std::error::Error>> { // adapted from my hw9
+        let mut reader_row_count = Reader::from_path(filepath)?; // not sure if there's a way around this
         let mut reader = Reader::from_path(filepath)?;
         let mut tmp_res: Vec<graph::NodeData> = Vec::new();
 
+        let row_count = reader_row_count.records().count() as i16 ;
+
         for res in reader.records() {
+
             let record = res?;
-            let mut actors : Vec<String> = Vec::new();
+            let mut actors: Vec<String> = Vec::new();
 
             let mut gross_string: String = record.get(7).unwrap().parse().unwrap();
             let gross_unknown = "Gross";
@@ -30,26 +44,29 @@ pub(crate) mod read_csv { // todo: modify for new csv file
                 actors.push(tmp);
             }
 
-            if !gross_string.contains(gross_unknown){
+            if !gross_string.contains(gross_unknown) {
                 gross_string.pop();
                 gross_string.remove(0);
             } else {
                 gross_string = String::from("0.0");
             }
 
+            let mut dir: String = record.get(2).unwrap().parse().unwrap();
+            let id = calculate_hash(&mut dir).abs() ;
+
             tmp_res.push(graph::NodeData {
-                node_id: 0,
+                node_index: id % row_count,
+                node_id: id,
                 movie_title: record.get(0).unwrap().parse().unwrap(),
                 year: record.get(1).unwrap().parse().unwrap(),
                 director: record.get(2).unwrap().parse().unwrap(),
                 main_actors: actors,
                 rating: record.get(4).unwrap().parse().unwrap(),
-                total_gross: gross_string.parse().unwrap(), // todo FIX THIS
-                genres: (record.get(8).unwrap().parse().unwrap(), record.get(9).unwrap().parse().unwrap())
-            })
+                total_gross: gross_string.parse().unwrap(),
+                genres: (record.get(8).unwrap().parse().unwrap(), record.get(9).unwrap().parse().unwrap()),
+            });
         }
         Ok(tmp_res)
-
     }
 }
 

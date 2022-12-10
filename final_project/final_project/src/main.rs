@@ -29,22 +29,22 @@ fn main() {
 proj:
 
 pt1: parse data
-read csv, init graph (based on what??)
-insert data into graph
+read csv, init Graph (based on what??)
+insert data into Graph
 
 pt2: analyze data
-what graph analysis can be done on this graph?
+what Graph analysis can be done on this Graph?
     how I choose for things to be connected matters
 
 q: what does each node hold? -> struct of data
 q: how are nodes connected?
 q: what defines connected?
 
-about graph:
+about Graph:
 - non directional
 - weighted by....
 
-Connect graph by:
+Connect Graph by:
 - director?
 - main actors?
 -

@@ -11,6 +11,7 @@ pub(crate) mod graph {
 
     #[derive(Debug)]
     pub struct NodeData {
+        pub node_index: i16,
         pub node_id : i16,
         pub movie_title: String,
         pub year: i16,
@@ -21,12 +22,24 @@ pub(crate) mod graph {
         pub genres: (String, String),
     }
 
+    pub struct Graph {
+        adj_list : Vec<Vec<NodeData>>,
+    }
 
-    impl NodeData {
+    impl Graph  {
 
-        fn insert_data() {
-            todo!()
-        }
+        /*
+        The real question is wtf do we do here
+
+        connect based on hash of director name
+
+
+
+
+         */
+
+
 
     }
+
 }
