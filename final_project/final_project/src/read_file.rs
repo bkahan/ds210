@@ -35,77 +35,27 @@ pub(crate) mod read_csv { // todo: modify for new csv file
         let mut tmp_res: Vec<graph::NodeData> = Vec::new();
 
         for res in reader.records() {
-            // let line: graph::NodeData = res?;
-            // tmp_res.push(line);
             let record = res?;
             let mut actors : Vec<String> = Vec::new();
-
-
-
             let csv_entry: Vec<&str> = record.get(3).unwrap().split(',').collect();
-            // println!("{:?}", &csv_entry);
-            // for actor in csv_entry {
-            //     actors.push(actor).to_owned()
-            // }
-            // println!("{:?}", &actors);
-
             for str in csv_entry {
                 let mut tmp = String::new();
                 tmp = str.clone().parse().unwrap();
                 actors.push(tmp);
             }
-
-
             tmp_res.push(graph::NodeData {
                 node_id: 0,
                 movie_title: record.get(0).unwrap().parse().unwrap(),
                 year: record.get(1).unwrap().parse().unwrap(),
                 director: record.get(2).unwrap().parse().unwrap(),
-                main_actors: actors, // todo FIX THIS
+                main_actors: actors,
                 rating: record.get(4).unwrap().parse().unwrap(),
-                total_gross: record.get(7).unwrap().parse().unwrap(),
+                total_gross: record.get(7).unwrap().parse().unwrap(), // todo FIX THIS
                 genres: (record.get(8).unwrap().parse().unwrap(), record.get(9).unwrap().parse().unwrap())
             })
         }
         Ok(tmp_res)
-
-
-
-
-        /*
-        let data = File::open(filepath)?;
-        let reader = BufReader::new(data);
-
-        let mut tmp_res: Vec<graph::NodeData> = Vec::new();
-
-        let mut count = 0;
-
-        for line in reader.lines() {
-            let tmp: String = line.unwrap();
-            let split_lines: Vec<&str> = tmp.split(',').collect() ;
-            count+=1;
-
-            match split_lines[0] { // todo: still kinda shit but better
-                "Movie_Title" => {
-                    continue
-                },
-                _ => {
-                    tmp_res.push(graph::NodeData {
-                        node_id: count,
-                        movie_title: split_lines[0],
-                        year: split_lines[1].parse().unwrap(),
-                        director: split_lines[2],
-                        main_actors: vec![],
-                        rating: split_lines[4].parse().unwrap(),
-                        total_gross: split_lines[7].parse().unwrap(),
-                        genres: (split_lines[8], split_lines[9])
-                    });
-                }
-            }
-        }
-        Ok(tmp_res)
-
-         */
+        
     }
 }
 
