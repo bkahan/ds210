@@ -15,7 +15,7 @@ pub(crate) mod graph {
         pub movie_title: String,
         pub year: i16,
         pub director: String,
-        pub main_actors: Vec<&'static str>,
+        pub main_actors: Vec<String>,
         pub rating: f32,
         pub total_gross: f32,
         pub genres: (String, String),
