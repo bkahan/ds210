@@ -9,26 +9,8 @@ Collaborators: none
 
 pub(crate) mod read_csv { // todo: modify for new csv file
 
-    use std::fs::File;
-    use std::io::{BufRead, BufReader};
-    use std::net::Shutdown::Read;
     use crate::graph::graph;
-    use csv;
     use csv::Reader;
-
-    fn file2node_helper(csv_entry: Vec<&str>, ) {
-
-        for str in csv_entry {
-            let mut tmp = String::new();
-            tmp = str.clone().parse().unwrap();
-
-
-
-        }
-
-
-
-    }
 
     pub fn file2node(filepath: &str) -> Result<Vec<graph::NodeData>, Box<dyn std::error::Error>> { // adapted from my hw9
         let mut reader = Reader::from_path(filepath)?;
@@ -37,12 +19,24 @@ pub(crate) mod read_csv { // todo: modify for new csv file
         for res in reader.records() {
             let record = res?;
             let mut actors : Vec<String> = Vec::new();
+
+            let mut gross_string: String = record.get(7).unwrap().parse().unwrap();
+            let gross_unknown = "Gross";
+
             let csv_entry: Vec<&str> = record.get(3).unwrap().split(',').collect();
             for str in csv_entry {
                 let mut tmp = String::new();
                 tmp = str.clone().parse().unwrap();
                 actors.push(tmp);
             }
+
+            if !gross_string.contains(gross_unknown){
+                gross_string.pop();
+                gross_string.remove(0);
+            } else {
+                gross_string = String::from("0.0");
+            }
+
             tmp_res.push(graph::NodeData {
                 node_id: 0,
                 movie_title: record.get(0).unwrap().parse().unwrap(),
@@ -50,12 +44,12 @@ pub(crate) mod read_csv { // todo: modify for new csv file
                 director: record.get(2).unwrap().parse().unwrap(),
                 main_actors: actors,
                 rating: record.get(4).unwrap().parse().unwrap(),
-                total_gross: record.get(7).unwrap().parse().unwrap(), // todo FIX THIS
+                total_gross: gross_string.parse().unwrap(), // todo FIX THIS
                 genres: (record.get(8).unwrap().parse().unwrap(), record.get(9).unwrap().parse().unwrap())
             })
         }
         Ok(tmp_res)
-        
+
     }
 }
 
