@@ -6,7 +6,6 @@ DS210
 Collaborators: none
 */
 
-
 pub(crate) mod graph {
     use std::collections::LinkedList;
 
@@ -40,7 +39,7 @@ pub(crate) mod graph {
         pub fn insert_data<'b>(graph: &'a mut Graph<'a>, data: &'a Vec<NodeData>) {
 
             for node in data {
-                println!("Index: {}\n", node.node_index);
+                //println!("Index: {}\n", node.node_index);
                 graph.adj_list[node.node_index].push_front(&node);
             }
         }

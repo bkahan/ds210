@@ -24,8 +24,6 @@ fn main() {
 
     graph::graph::Graph::insert_data(&mut graph, &result);
 
-
-
     println!("Hello, world!");
 }
 

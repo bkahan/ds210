@@ -13,7 +13,7 @@ pub(crate) mod read_csv { // todo: modify for new csv file
     use csv::Reader;
     use std::hash::{Hash, Hasher};
 
-    fn calculate_hash<T: Hash>(t: &T) -> i16 { // from https://doc.rust-lang.org/std/hash/index.html example
+    fn calculate_hash<T: Hash>(t: &T) -> i16 { // from https://doc.rust-lang.org/std/hash/index.html example 
         let mut s = DefaultHasher::new();
         t.hash(&mut s);
         s.finish() as i16
