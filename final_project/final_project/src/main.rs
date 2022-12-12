@@ -6,6 +6,8 @@ DS210
 Collaborators: none
 */
 
+extern crate core;
+
 mod read_file;
 mod graph;
 

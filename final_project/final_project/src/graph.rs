@@ -8,10 +8,11 @@ Collaborators: none
 
 
 pub(crate) mod graph {
+    use std::collections::LinkedList;
 
     #[derive(Debug)]
     pub struct NodeData {
-        pub node_index: i16,
+        pub node_index: usize,
         pub node_id : i16,
         pub movie_title: String,
         pub year: i16,
@@ -23,10 +24,22 @@ pub(crate) mod graph {
     }
 
     pub struct Graph {
-        adj_list : Vec<Vec<NodeData>>,
+        adj_list : LinkedList<LinkedList<NodeData>>,
     }
 
     impl Graph  {
+
+        pub fn new_graph(num_verts : i16) -> Graph {
+            let mut tmp_list = LinkedList::<LinkedList<NodeData>>::new();
+
+            for x in 0..num_verts {
+                tmp_list.push_front(LinkedList::<NodeData>::new())
+            }
+
+            return Graph {
+                adj_list: tmp_list
+            };
+        }
 
         /*
         The real question is wtf do we do here

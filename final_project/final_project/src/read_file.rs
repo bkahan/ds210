@@ -10,13 +10,11 @@ Collaborators: none
 pub(crate) mod read_csv { // todo: modify for new csv file
 
     use std::collections::hash_map::DefaultHasher;
-    use std::fs::read;
     use crate::graph::graph;
     use csv::Reader;
     use std::hash::{Hash, Hasher};
-    use std::ops::AddAssign;
 
-    fn calculate_hash<T: Hash>(t: &T) -> i16 {
+    fn calculate_hash<T: Hash>(t: &T) -> i16 { // from https://doc.rust-lang.org/std/hash/index.html example
         let mut s = DefaultHasher::new();
         t.hash(&mut s);
         s.finish() as i16
@@ -44,18 +42,18 @@ pub(crate) mod read_csv { // todo: modify for new csv file
                 actors.push(tmp);
             }
 
-            if !gross_string.contains(gross_unknown) {
+            if !gross_string.contains(gross_unknown) { // remove leading $ and trailing M
                 gross_string.pop();
                 gross_string.remove(0);
             } else {
-                gross_string = String::from("0.0");
+                gross_string = String::from("-1.0");
             }
 
             let mut dir: String = record.get(2).unwrap().parse().unwrap();
             let id = calculate_hash(&mut dir).abs() ;
 
             tmp_res.push(graph::NodeData {
-                node_index: id % row_count,
+                node_index: (id % row_count) as usize,
                 node_id: id,
                 movie_title: record.get(0).unwrap().parse().unwrap(),
                 year: record.get(1).unwrap().parse().unwrap(),
