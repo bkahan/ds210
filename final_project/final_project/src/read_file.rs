@@ -6,7 +6,6 @@ DS210
 Collaborators: none
 */
 
-
 pub(crate) mod read_csv { // todo: modify for new csv file
 
     use std::collections::hash_map::DefaultHasher;
@@ -53,8 +52,8 @@ pub(crate) mod read_csv { // todo: modify for new csv file
             let id = calculate_hash(&mut dir).abs() ;
 
             tmp_res.push(graph::NodeData {
-                node_index: (id % row_count) as usize,
-                node_id: id,
+                node_index: (id % row_count) as usize, // make sure that the index is correctly sized
+                node_id: id as usize,
                 movie_title: record.get(0).unwrap().parse().unwrap(),
                 year: record.get(1).unwrap().parse().unwrap(),
                 director: record.get(2).unwrap().parse().unwrap(),

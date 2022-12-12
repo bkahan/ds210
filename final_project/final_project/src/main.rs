@@ -16,10 +16,13 @@ fn main() {
     let path = "/Users/benkahan/Documents/School/ds210/final_project/final_project/data/data.csv";
     //let path = "../data/data.csv";
 
-    let result = read_file::read_csv::file2node(path);
+    let csv_data = read_file::read_csv::file2node(path);
 
-    result.unwrap();
+    let result = csv_data.unwrap();
 
+    let mut graph = graph::graph::Graph::new_graph(result.len() as i16);
+
+    graph::graph::Graph::insert_data(&mut graph, &result);
 
 
 

@@ -10,10 +10,10 @@ Collaborators: none
 pub(crate) mod graph {
     use std::collections::LinkedList;
 
-    #[derive(Debug)]
+    #[derive(Clone)]
     pub struct NodeData {
         pub node_index: usize,
-        pub node_id : i16,
+        pub node_id : usize,
         pub movie_title: String,
         pub year: i16,
         pub director: String,
@@ -23,22 +23,26 @@ pub(crate) mod graph {
         pub genres: (String, String),
     }
 
-    pub struct Graph {
-        adj_list : LinkedList<LinkedList<NodeData>>,
+    pub struct Graph<'a> {
+        adj_list : Vec<LinkedList<&'a NodeData>>,
     }
 
-    impl Graph  {
+    impl<'a> Graph<'a>  {
 
-        pub fn new_graph(num_verts : i16) -> Graph {
-            let mut tmp_list = LinkedList::<LinkedList<NodeData>>::new();
-
-            for x in 0..num_verts {
-                tmp_list.push_front(LinkedList::<NodeData>::new())
-            }
+        pub fn new_graph<'b>(num_verts : i16) -> Graph<'a> {
+            let tmp = vec![LinkedList::<&'a NodeData>::new(); num_verts as usize];
 
             return Graph {
-                adj_list: tmp_list
+                adj_list: tmp
             };
+        }
+
+        pub fn insert_data<'b>(graph: &'a mut Graph<'a>, data: &'a Vec<NodeData>) {
+
+            for node in data {
+                println!("Index: {}\n", node.node_index);
+                graph.adj_list[node.node_index].push_front(&node);
+            }
         }
 
         /*
