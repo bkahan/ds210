@@ -39,23 +39,45 @@ pub(crate) mod graph {
         pub fn insert_data<'b>(graph: &'a mut Graph<'a>, data: &'a Vec<NodeData>) {
 
             for node in data {
-                //println!("Index: {}\n", node.node_index);
+                println!("Index: {}\n", node.node_index);
                 graph.adj_list[node.node_index].push_front(&node);
             }
         }
 
-        /*
-        The real question is wtf do we do here
-
-        connect based on hash of director name
+        pub fn bfs<'c>(graph: &'a mut Graph<'a>) {
 
 
+            /*
+
+            from wikipedia: https://en.wikipedia.org/wiki/Breadth-first_search
+            using to my implementation 
+
+                Input: A graph G and a starting vertex root of G
+
+                Output: Goal state. The parent links trace the shortest path back to root[8]
+
+                 1  procedure BFS(G, root) is
+                 2      let Q be a queue
+                 3      label root as explored
+                 4      Q.enqueue(root)
+                 5      while Q is not empty do
+                 6          v := Q.dequeue()
+                 7          if v is the goal then
+                 8              return v
+                 9          for all edges from v to w in G.adjacentEdges(v) do
+                10              if w is not labeled as explored then
+                11                  label w as explored
+                12                  w.parent := v
+                13                  Q.enqueue(w)
 
 
-         */
+
+
+             */
 
 
 
+        }
     }
 
 }
