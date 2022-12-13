@@ -7,10 +7,17 @@ Collaborators: none
 */
 
 pub(crate) mod graph {
-    use std::collections::LinkedList;
+    use std::collections::{LinkedList, VecDeque};
+    use std::ops::{Deref, DerefMut};
+
+    #[derive(Copy, Clone, Default)]
+    pub enum IsVisited {
+        _YES,
+        #[default] _NO
+    }
 
     #[derive(Clone)]
-    pub struct NodeData {
+    pub struct NodeData { // each csv line is converted to this
         pub node_index: usize,
         pub node_id : usize,
         pub movie_title: String,
@@ -36,18 +43,34 @@ pub(crate) mod graph {
             };
         }
 
-        pub fn insert_data<'b>(graph: &'a mut Graph<'a>, data: &'a Vec<NodeData>) {
-
+        pub fn insert_data<'b>(graph: &mut Graph<'a>, data: &'a Vec<NodeData>) {
             for node in data {
-                println!("Index: {}\n", node.node_index);
-                graph.adj_list[node.node_index].push_front(&node);
+                //println!("Index: {}\n", node.node_index);
+                graph.adj_list[node.node_index].push_front(node);
             }
         }
 
-        pub fn bfs<'c>(graph: &'a mut Graph<'a>) {
+        pub fn bfs(graph: &Graph) {
+
+            let num_verts = graph.adj_list.len() ;
+
+            let root: usize = (num_verts as f32 / 2.0) as usize; // middle as root
+
+            let mut queue = VecDeque::<&LinkedList<&NodeData>>::new();
+
+            let mut is_visited : Vec<IsVisited> = vec![Default::default() ; num_verts];
+
+            queue.push_front(&graph.adj_list[root]);
+
+            while !queue.is_empty() {
+                let mut tmp = queue.pop_back().unwrap();
+
+                for node in tmp {
+                    print!("{}", node.node_index)
+                }
 
 
-
+            }
 
 
             /*
@@ -65,8 +88,6 @@ pub(crate) mod graph {
                  4      Q.enqueue(root)
                  5      while Q is not empty do
                  6          v := Q.dequeue()
-                 7          if v is the goal then
-                 8              return v
                  9          for all edges from v to w in G.adjacentEdges(v) do
                 10              if w is not labeled as explored then
                 11                  label w as explored
