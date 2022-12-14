@@ -20,11 +20,12 @@ fn main() {
     let csv_data = read_file::read_csv::file2node(path);
 
     let mut result = csv_data.unwrap();
-    let mut graph = graph::graph::Graph::new_graph(result.len() as i16);
+    let mut graph = graph::graph::Graph::new_graph(&result);
 
     graph::graph::Graph::insert_data(&mut graph, &mut result);
 
     graph::graph::Graph::bfs(&graph);
+
 
 }
 

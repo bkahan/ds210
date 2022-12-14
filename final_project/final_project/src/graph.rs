@@ -7,16 +7,16 @@ Collaborators: none
 */
 
 pub(crate) mod graph {
-    use std::collections::{LinkedList, VecDeque};
+    use std::collections::{HashSet, LinkedList, VecDeque};
     use std::ops::{Deref, DerefMut};
 
-    #[derive(Copy, Clone, Default)]
+    #[derive(Copy, Clone, Default, PartialEq)]
     pub enum IsVisited {
         _YES,
         #[default] _NO
     }
 
-    #[derive(Clone)]
+    #[derive(PartialEq, Eq, Hash, Clone)]
     pub struct NodeData { // each csv line is converted to this
         pub node_index: usize,
         pub node_id : usize,
@@ -24,8 +24,8 @@ pub(crate) mod graph {
         pub year: i16,
         pub director: String,
         pub main_actors: Vec<String>,
-        pub rating: f32,
-        pub total_gross: f32,
+        // pub rating: f32,
+        // pub total_gross: f32,
         pub genres: (String, String),
     }
 
@@ -35,8 +35,17 @@ pub(crate) mod graph {
 
     impl<'a> Graph<'a>  {
 
-        pub fn new_graph<'b>(num_verts : i16) -> Graph<'a> {
-            let tmp = vec![LinkedList::<&'a NodeData>::new(); num_verts as usize];
+        pub fn new_graph<'b>(data : &Vec<NodeData>) -> Graph<'a> {
+
+            let mut all_actors = HashSet::<&String>::new();
+
+            for node in data {
+                for actor in &node.main_actors {
+                    all_actors.insert(actor);
+                }
+            }
+
+            let tmp = vec![LinkedList::<&'a NodeData>::new(); all_actors.len()];
 
             return Graph {
                 adj_list: tmp
@@ -44,33 +53,65 @@ pub(crate) mod graph {
         }
 
         pub fn insert_data<'b>(graph: &mut Graph<'a>, data: &'a Vec<NodeData>) {
+
+            /*
+                what do I wanna do here:
+
+                take each movie title, get the index for it
+                for each actor in each movie:
+                    push index of movie
+
+             */
+
             for node in data {
+
+                for actor in &node.main_actors {
+
+                    graph.adj_list[node.node_id].push_front(node);
+
+
+
+
+                }
+
+
+
+
                 //println!("Index: {}\n", node.node_index);
                 graph.adj_list[node.node_index].push_front(node);
             }
         }
 
-        pub fn bfs(graph: &Graph) {
+        pub fn bfs(graph: &Graph) { // todo: need to fix the data to graph issue (ex not a graph)
 
             let num_verts = graph.adj_list.len() ;
-
-            let root: usize = (num_verts as f32 / 2.0) as usize; // middle as root
 
             let mut queue = VecDeque::<&LinkedList<&NodeData>>::new();
 
             let mut is_visited : Vec<IsVisited> = vec![Default::default() ; num_verts];
 
-            queue.push_front(&graph.adj_list[root]);
+            for vert in 0..num_verts {
 
-            while !queue.is_empty() {
-                let mut tmp = queue.pop_back().unwrap();
+                if *is_visited.get(vert).unwrap() == IsVisited::_NO {
 
-                for node in tmp {
-                    print!("{}", node.node_index)
+                    queue.push_front(&graph.adj_list[vert]);
+                    is_visited[vert] = IsVisited::_YES;
+
+                    while !queue.is_empty() {
+                        let mut tmp = queue.pop_back().unwrap();
+
+                        for node in tmp {
+                            print!("Node Index: {}", node.node_index)
+                        }
+
+
+                    }
                 }
 
-
             }
+
+
+
 
 
             /*

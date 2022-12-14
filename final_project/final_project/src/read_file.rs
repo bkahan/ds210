@@ -13,10 +13,17 @@ pub(crate) mod read_csv { // todo: modify for new csv file
     use csv::Reader;
     use std::hash::{Hash, Hasher};
 
-    fn calculate_hash<T: Hash>(t: &T) -> i16 { // from https://doc.rust-lang.org/std/hash/index.html example
+    fn calculate_id<T: Hash>(movie_title: &T) -> i16 { // adapted from https://doc.rust-lang.org/std/hash/index.html example
         let mut s = DefaultHasher::new();
-        t.hash(&mut s);
-        s.finish() as i16
+        movie_title.hash(&mut s);
+
+        let mut tmp = s.finish() as i16;
+
+        tmp = tmp.abs();
+
+        return tmp;
+
+
     }
 
     pub fn file2node(filepath: &str) -> Result<Vec<graph::NodeData>, Box<dyn std::error::Error>> { // adapted from my hw9
@@ -48,8 +55,8 @@ pub(crate) mod read_csv { // todo: modify for new csv file
                 gross_string = String::from("-1.0");
             }
 
-            let mut dir: String = record.get(2).unwrap().parse().unwrap();
-            let id = calculate_hash(&mut dir).abs() ;
+            let mut title: String = record.get(0).unwrap().parse().unwrap();
+            let id = calculate_id(&mut title);
 
             tmp_res.push(graph::NodeData {
                 node_index: (id % row_count) as usize, // make sure that the index is correctly sized
@@ -58,8 +65,8 @@ pub(crate) mod read_csv { // todo: modify for new csv file
                 year: record.get(1).unwrap().parse().unwrap(),
                 director: record.get(2).unwrap().parse().unwrap(),
                 main_actors: actors,
-                rating: record.get(4).unwrap().parse().unwrap(),
-                total_gross: gross_string.parse().unwrap(),
+                // rating: record.get(4).unwrap().parse().unwrap(),
+                // total_gross: gross_string.parse().unwrap(),
                 genres: (record.get(8).unwrap().parse().unwrap(), record.get(9).unwrap().parse().unwrap()),
             });
         }
