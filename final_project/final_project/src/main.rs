@@ -24,11 +24,11 @@ fn main() {
 
     graph::graph::Graph::insert_data(&mut graph, &mut result);
 
-    graph::graph::Graph::bfs(&mut graph);
+    graph::graph::Graph::print_graph(&mut graph);
 
 
 }
-
+i
 /*
 
 proj:

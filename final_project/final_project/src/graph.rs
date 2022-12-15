@@ -94,22 +94,28 @@ pub(crate) mod graph {
             }
         }
 
-        pub fn bfs(graph: &Graph) { // todo: need to fix the data to graph issue (ex not a graph)
+        pub fn bfs(graph: &Graph) {
+
+
+        }
+
+        pub fn print_graph(graph: &Graph ) { // todo: need to fix the data to graph issue (ex not a graph)
 
             let num_verts = graph.adj_list.len() ;
 
             let mut queue = VecDeque::<&LinkedList<&NodeData>>::new();
 
-            //let mut is_visited : Vec<IsVisited> = vec![Default::default() ; num_verts];
+            let mut is_visited : Vec<IsVisited> = vec![Default::default() ; num_verts];
 
-            for (key, value) in graph.adj_list.iter() {
-                println!("Actor: {}", key);
-                for movie in value {
-                    println!("Movie Title: {}", movie.movie_title)
+                for (key, value) in graph.adj_list.iter() {
+                    println!("Actor: {}", key);
+                    for movie in value {
+                        println!("Movie Title: {}", movie.movie_title)
+                    }
+                    println!();
                 }
-                println!();
 
-            }
+
 
             // for vert in 0..num_verts {
             //
