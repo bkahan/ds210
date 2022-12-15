@@ -7,18 +7,18 @@ Collaborators: none
 */
 
 pub(crate) mod graph {
-
-    use std::collections::{HashMap, HashSet, LinkedList, VecDeque};
+    use std::collections::{HashMap, VecDeque};
     use std::ops::{Deref};
 
     #[derive(Copy, Clone, Default, PartialEq)]
     pub enum IsVisited {
         _YES,
-        #[default] _NO
+        #[default] _NO,
     }
 
     #[derive(PartialEq, Eq, Hash, Clone)]
-    pub struct NodeData { // each csv line is converted to this
+    pub struct NodeData {
+        // each csv line is converted to this
         pub movie_title: String,
         pub year: i16,
         pub director: String,
@@ -27,22 +27,16 @@ pub(crate) mod graph {
     }
 
     pub struct Graph<'a> {
-
-        adj_list : HashMap<String, Vec<&'a NodeData>>,
+        adj_list: HashMap<String, Vec<&'a NodeData>>,
     }
 
-    impl<'a> Graph<'a>  {
-
-        pub fn new_graph<'b>(data : &Vec<NodeData>) -> Graph<'a> {
-
-            let mut all_actors = HashSet::<&String>::new();
-
-            let mut tmp : HashMap<String, Vec<&'a NodeData>> = HashMap::new();
+    impl<'a> Graph<'a> {
+        pub fn new_graph<'b>(data: &Vec<NodeData>) -> Graph<'a> {
+            let mut tmp: HashMap<String, Vec<&'a NodeData>> = HashMap::new();
 
             for node in data {
                 for actor in &node.main_actors {
-                    tmp.insert(actor.deref().parse().unwrap(), Vec::<&'a NodeData>::new()); // todo: please tell me there's a better way to do this
-                    //all_actors.insert(actor);
+                    tmp.insert(actor.deref().parse().unwrap(), Vec::<&'a NodeData>::new());
                 }
             }
 
@@ -52,38 +46,28 @@ pub(crate) mod graph {
         }
 
         pub fn insert_data<'b>(graph: &mut Graph<'a>, data: &'a mut Vec<NodeData>) {
-
             for node in data {
                 for actor in &node.main_actors {
                     let adj_list = graph.adj_list.get_mut(actor).unwrap();
                     adj_list.push(node);
-
                 }
             }
         }
 
         pub fn bfs(graph: &Graph) {
-
-
-        }
-
-        pub fn print_graph(graph: &Graph ) { // todo: need to fix the data to graph issue (ex not a graph)
-
-            let num_verts = graph.adj_list.len() ;
-
-            let mut queue = VecDeque::<&LinkedList<&NodeData>>::new();
-
-            let mut is_visited : Vec<IsVisited> = vec![Default::default() ; num_verts];
-
-                for (key, value) in graph.adj_list.iter() {
-                    println!("Actor: {}", key);
-                    for movie in value {
-                        println!("Movie Title: {}", movie.movie_title)
-                    }
-                    println!();
-                }
-
-
+            // let num_verts = graph.adj_list.len() ;
+            //
+            // let mut queue = VecDeque::<&LinkedList<&NodeData>>::new();
+            //
+            // let mut is_visited : Vec<IsVisited> = vec![Default::default() ; num_verts];
+            //
+            // for (key, value) in graph.adj_list.iter() {
+            //     println!("Actor: {}", key);
+            //     for movie in value {
+            //         println!("Movie Title: {}", movie.movie_title)
+            //     }
+            //     println!();
+            // }
 
             // for vert in 0..num_verts {
             //
@@ -127,8 +111,17 @@ pub(crate) mod graph {
                 13                  Q.enqueue(w)
 
              */
+        }
 
+        pub fn print_graph(graph: &Graph) { // todo: need to fix the data to graph issue (ex not a graph)
+
+            for (key, value) in graph.adj_list.iter() {
+                println!("Actor: {}", key);
+                for movie in value {
+                    println!("Movie Title: {}", movie.movie_title)
+                }
+                println!();
+            }
         }
     }
-
 }
