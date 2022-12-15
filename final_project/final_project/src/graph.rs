@@ -7,8 +7,12 @@ Collaborators: none
 */
 
 pub(crate) mod graph {
+
     use std::collections::{HashSet, LinkedList, VecDeque};
     use std::ops::{Deref, DerefMut};
+
+    use crate::read_file;
+    use crate::read_file::read_csv;
 
     #[derive(Copy, Clone, Default, PartialEq)]
     pub enum IsVisited {
@@ -45,14 +49,14 @@ pub(crate) mod graph {
                 }
             }
 
-            let tmp = vec![LinkedList::<&'a NodeData>::new(); all_actors.len()];
+            let tmp = vec![LinkedList::<&'a NodeData>::new(); all_actors.len()]; // this sets up that data as: row length = # of actors total
 
             return Graph {
                 adj_list: tmp
             };
         }
 
-        pub fn insert_data<'b>(graph: &mut Graph<'a>, data: &'a Vec<NodeData>) {
+        pub fn insert_data<'b>(graph: &mut Graph<'a>, data: &'a mut Vec<NodeData>) {
 
             /*
                 what do I wanna do here:
@@ -64,13 +68,14 @@ pub(crate) mod graph {
              */
 
             for node in data {
-
+                if node.node_index == 0  {
+                    node.node_index = node.node_index % graph.adj_list.len(); // calculate node index, should only need to do this once
+                }
                 for actor in &node.main_actors {
 
-                    graph.adj_list[node.node_id].push_front(node);
+                    let index = read_file::read_csv::calculate_id(actor) % graph.adj_list.len() as i16 ;
 
-
-
+                    graph.adj_list[index as usize].push_front(node);
 
                 }
 
@@ -78,7 +83,7 @@ pub(crate) mod graph {
 
 
                 //println!("Index: {}\n", node.node_index);
-                graph.adj_list[node.node_index].push_front(node);
+                //graph.adj_list[node.node_index].push_front(node);
             }
         }
 
@@ -101,9 +106,9 @@ pub(crate) mod graph {
                         let mut tmp = queue.pop_back().unwrap();
 
                         for node in tmp {
-                            print!("Node Index: {}", node.node_index)
+                            println!("Movie Title: {}", node.movie_title)
                         }
-
+                        println!();
 
                     }
                 }

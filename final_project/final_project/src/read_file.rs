@@ -13,7 +13,7 @@ pub(crate) mod read_csv { // todo: modify for new csv file
     use csv::Reader;
     use std::hash::{Hash, Hasher};
 
-    fn calculate_id<T: Hash>(movie_title: &T) -> i16 { // adapted from https://doc.rust-lang.org/std/hash/index.html example
+    pub fn calculate_id<T: Hash>(movie_title: &T) -> i16 { // adapted from https://doc.rust-lang.org/std/hash/index.html example
         let mut s = DefaultHasher::new();
         movie_title.hash(&mut s);
 
@@ -23,6 +23,13 @@ pub(crate) mod read_csv { // todo: modify for new csv file
 
         return tmp;
 
+    }
+
+    pub fn calculate_hash<T: Hash>(to_hash: &T) -> i16 {
+        let mut s = DefaultHasher::new();
+        to_hash.hash(&mut s);
+        let tmp = s.finish() as i16;
+        return tmp.abs();
 
     }
 
@@ -59,7 +66,7 @@ pub(crate) mod read_csv { // todo: modify for new csv file
             let id = calculate_id(&mut title);
 
             tmp_res.push(graph::NodeData {
-                node_index: (id % row_count) as usize, // make sure that the index is correctly sized
+                node_index: 0, // make sure that the index is correctly sized
                 node_id: id as usize,
                 movie_title: record.get(0).unwrap().parse().unwrap(),
                 year: record.get(1).unwrap().parse().unwrap(),
@@ -90,7 +97,7 @@ line[0], line[1], line[2], line[3], line[4], line[7], line[8], line[9]
 data types:
 0: str
 1: u16
-2: str
+2: stri
 3: vec<str>
 4: f16
 7: f16
@@ -98,5 +105,12 @@ data types:
 
 FIND by movie_title
 
+
+ */
+
+
+/*
+new data structure for graph:
+graph is a hashmap (key = individual actor, value = vec<nodedata>)
 
  */
