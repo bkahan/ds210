@@ -9,10 +9,7 @@ Collaborators: none
 pub(crate) mod graph {
 
     use std::collections::{HashMap, HashSet, LinkedList, VecDeque};
-    use std::ops::{Deref, DerefMut};
-
-    use crate::read_file;
-    use crate::read_file::read_csv;
+    use std::ops::{Deref};
 
     #[derive(Copy, Clone, Default, PartialEq)]
     pub enum IsVisited {
@@ -22,21 +19,16 @@ pub(crate) mod graph {
 
     #[derive(PartialEq, Eq, Hash, Clone)]
     pub struct NodeData { // each csv line is converted to this
-        // pub node_index: usize,
-        // pub node_id : usize,
         pub movie_title: String,
         pub year: i16,
         pub director: String,
         pub main_actors: Vec<String>,
-        // pub rating: f32,
-        // pub total_gross: f32,
         pub genres: (String, String),
     }
 
     pub struct Graph<'a> {
 
         adj_list : HashMap<String, Vec<&'a NodeData>>,
-        //adj_list : Vec<LinkedList<&'a NodeData>>,
     }
 
     impl<'a> Graph<'a>  {
@@ -54,10 +46,6 @@ pub(crate) mod graph {
                 }
             }
 
-
-
-            //let tmp = vec![LinkedList::<&'a NodeData>::new(); all_actors.len()]; // this sets up that data as: row length = # of actors total
-
             return Graph {
                 adj_list: tmp
             };
@@ -65,32 +53,12 @@ pub(crate) mod graph {
 
         pub fn insert_data<'b>(graph: &mut Graph<'a>, data: &'a mut Vec<NodeData>) {
 
-            /*
-                what do I wanna do here:
-
-                take each movie title, get the index for it
-                for each actor in each movie:
-                    push index of movie
-
-             */
-
             for node in data {
-                // if node.node_index == 0  {
-                //     node.node_index = node.node_index % graph.adj_list.len(); // calculate node index, should only need to do this once
-                // }
                 for actor in &node.main_actors {
-
-                    //let index = read_file::read_csv::calculate_id(actor) % graph.adj_list.len() as i16 ;
-                    let mut adj_list = graph.adj_list.get_mut(actor).unwrap();
+                    let adj_list = graph.adj_list.get_mut(actor).unwrap();
                     adj_list.push(node);
 
                 }
-
-
-
-
-                //println!("Index: {}\n", node.node_index);
-                //graph.adj_list[node.node_index].push_front(node);
             }
         }
 
