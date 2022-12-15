@@ -8,7 +8,7 @@ Collaborators: none
 
 pub(crate) mod graph {
 
-    use std::collections::{HashSet, LinkedList, VecDeque};
+    use std::collections::{HashMap, HashSet, LinkedList, VecDeque};
     use std::ops::{Deref, DerefMut};
 
     use crate::read_file;
@@ -22,8 +22,8 @@ pub(crate) mod graph {
 
     #[derive(PartialEq, Eq, Hash, Clone)]
     pub struct NodeData { // each csv line is converted to this
-        pub node_index: usize,
-        pub node_id : usize,
+        // pub node_index: usize,
+        // pub node_id : usize,
         pub movie_title: String,
         pub year: i16,
         pub director: String,
@@ -34,7 +34,9 @@ pub(crate) mod graph {
     }
 
     pub struct Graph<'a> {
-        adj_list : Vec<LinkedList<&'a NodeData>>,
+
+        adj_list : HashMap<String, Vec<&'a NodeData>>,
+        //adj_list : Vec<LinkedList<&'a NodeData>>,
     }
 
     impl<'a> Graph<'a>  {
@@ -43,13 +45,18 @@ pub(crate) mod graph {
 
             let mut all_actors = HashSet::<&String>::new();
 
+            let mut tmp : HashMap<String, Vec<&'a NodeData>> = HashMap::new();
+
             for node in data {
                 for actor in &node.main_actors {
-                    all_actors.insert(actor);
+                    tmp.insert(actor.deref().parse().unwrap(), Vec::<&'a NodeData>::new()); // todo: please tell me there's a better way to do this
+                    //all_actors.insert(actor);
                 }
             }
 
-            let tmp = vec![LinkedList::<&'a NodeData>::new(); all_actors.len()]; // this sets up that data as: row length = # of actors total
+
+
+            //let tmp = vec![LinkedList::<&'a NodeData>::new(); all_actors.len()]; // this sets up that data as: row length = # of actors total
 
             return Graph {
                 adj_list: tmp
@@ -68,14 +75,14 @@ pub(crate) mod graph {
              */
 
             for node in data {
-                if node.node_index == 0  {
-                    node.node_index = node.node_index % graph.adj_list.len(); // calculate node index, should only need to do this once
-                }
+                // if node.node_index == 0  {
+                //     node.node_index = node.node_index % graph.adj_list.len(); // calculate node index, should only need to do this once
+                // }
                 for actor in &node.main_actors {
 
-                    let index = read_file::read_csv::calculate_id(actor) % graph.adj_list.len() as i16 ;
-
-                    graph.adj_list[index as usize].push_front(node);
+                    //let index = read_file::read_csv::calculate_id(actor) % graph.adj_list.len() as i16 ;
+                    let mut adj_list = graph.adj_list.get_mut(actor).unwrap();
+                    adj_list.push(node);
 
                 }
 
@@ -93,31 +100,36 @@ pub(crate) mod graph {
 
             let mut queue = VecDeque::<&LinkedList<&NodeData>>::new();
 
-            let mut is_visited : Vec<IsVisited> = vec![Default::default() ; num_verts];
+            //let mut is_visited : Vec<IsVisited> = vec![Default::default() ; num_verts];
 
-            for vert in 0..num_verts {
-
-                if *is_visited.get(vert).unwrap() == IsVisited::_NO {
-
-                    queue.push_front(&graph.adj_list[vert]);
-                    is_visited[vert] = IsVisited::_YES;
-
-                    while !queue.is_empty() {
-                        let mut tmp = queue.pop_back().unwrap();
-
-                        for node in tmp {
-                            println!("Movie Title: {}", node.movie_title)
-                        }
-                        println!();
-
-                    }
+            for (key, value) in graph.adj_list.iter() {
+                println!("Actor: {}", key);
+                for movie in value {
+                    println!("Movie Title: {}", movie.movie_title)
                 }
+                println!();
 
             }
 
-
-
-
+            // for vert in 0..num_verts {
+            //
+            //     if *is_visited.get(vert).unwrap() == IsVisited::_NO {
+            //
+            //         queue.push_front(&graph.adj_list[vert]);
+            //         is_visited[vert] = IsVisited::_YES;q
+            //
+            //         while !queue.is_empty() {
+            //             let mut tmp = queue.pop_back().unwrap();
+            //
+            //             for node in tmp {
+            //                 println!("Movie Title: {}", node.movie_title)
+            //             }
+            //             println!();
+            //
+            //         }
+            //     }
+            //
+            // }
 
             /*
 
@@ -140,12 +152,7 @@ pub(crate) mod graph {
                 12                  w.parent := v
                 13                  Q.enqueue(w)
 
-
-
-
              */
-
-
 
         }
     }

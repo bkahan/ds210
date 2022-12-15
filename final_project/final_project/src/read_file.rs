@@ -66,8 +66,8 @@ pub(crate) mod read_csv { // todo: modify for new csv file
             let id = calculate_id(&mut title);
 
             tmp_res.push(graph::NodeData {
-                node_index: 0, // make sure that the index is correctly sized
-                node_id: id as usize,
+                // node_index: 0, // make sure that the index is correctly sized
+                // node_id: id as usize,
                 movie_title: record.get(0).unwrap().parse().unwrap(),
                 year: record.get(1).unwrap().parse().unwrap(),
                 director: record.get(2).unwrap().parse().unwrap(),
