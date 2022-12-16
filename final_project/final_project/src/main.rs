@@ -24,7 +24,5 @@ fn main() {
 
     graph::graph::Graph::print_graph(&mut graph);
 
-    graph::graph::Graph::bfs(&mut graph);
-
 }
 

@@ -6,7 +6,7 @@ DS210
 Collaborators: none
 */
 
-pub(crate) mod read_csv { // todo: modify for new csv file
+pub(crate) mod read_csv {
 
     use crate::graph::graph;
     use csv::Reader;
