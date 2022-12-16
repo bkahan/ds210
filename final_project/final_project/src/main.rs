@@ -8,8 +8,6 @@ Collaborators: none
 
 extern crate core;
 
-use std::borrow::Borrow;
-
 mod read_file;
 mod graph;
 
@@ -25,6 +23,8 @@ fn main() {
     graph::graph::Graph::insert_data(&mut graph, &mut result);
 
     graph::graph::Graph::print_graph(&mut graph);
+
+    graph::graph::Graph::bfs_helper(&graph);
 
 
 }

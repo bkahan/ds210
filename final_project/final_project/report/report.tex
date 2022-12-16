@@ -5,6 +5,9 @@
 \usepackage{amssymb}
 \usepackage[margin=1in]{geometry}
 \usepackage{graphicx}
+
+\graphicspath{ {./} }
+
 \author{Ben Kahan}
 \title{DS 210: Final Project Report}
 
@@ -50,6 +53,17 @@ These were selected as I did not require censorship information about the movies
 I was looking for sub-graphs and networks that describe the hidden relationships of actors and and their movies.  I believe that \texttt{Rating} and \texttt{Censor} are not required for this analysis and I chose to omit \texttt{Total\_Gross} due to time. 
 
 To aid my decision, I opened the data set in a Jupyter Notebook and inspected the CSV file's features. The notebook is included in addition to all Rust files. 
+
+\subsection{My Idea}
+
+My idea was to create a "2D graph" and I thought that I would be able to implement it in a similar fashion to Red/Black Trees. (i.e., by labeling). I wanted to construct a graph that was connected via Actor/Actresses but centered around Individual movies. For instance,  since Adam Sandler is in 50 First Dates and Grown Ups, the two movies would be connected by Adam Sandler.  
+
+I would create this graph by indexing every actor/actress in every movie in the data set (yes, very expensive). Then, I would connect them by adding each movie in a vector.  This would connect movies by means of actors. 
+
+\includegraphics[scale=.24]{draft-graph.jpeg}
+
+However,  this was significantly harder to implement than expected.  I thought that it would be straight forward to adapt full-connected graph algorithms to n-graphs but I was proven wrong.  
+
 
 \subsection{Data Structure Issues}
 
