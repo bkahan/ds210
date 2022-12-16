@@ -8,9 +8,9 @@ Collaborators: none
 
 pub(crate) mod graph {
     use std::collections::{HashMap, VecDeque};
-    use std::fmt::rt::v1::Count::Is;
     use std::hash::Hash;
     use std::ops::{Deref};
+    use crate::graph;
 
     #[derive(Copy, Clone, Default, PartialEq)]
     pub enum IsVisited {
@@ -56,45 +56,44 @@ pub(crate) mod graph {
             }
         }
 
-        pub fn bfs_helper(graph: &Graph) {
-
-            let mut queue = VecDeque::<&Vec<&NodeData>>::new();
-
-            let mut is_visited : HashMap<String, IsVisited> = HashMap::with_capacity(graph.adj_list.len());
-
+        pub fn bfs(graph: &mut Graph) {
             let all_actors = graph.adj_list.keys();
 
-            let all_actors1 = graph.adj_list.keys();
-
-            for actor in all_actors1 {
-                is_visited.insert(actor.deref().parse().unwrap(), IsVisited::_NO);
-            }
+            let mut is_visited: HashMap<String, IsVisited> = HashMap::with_capacity(graph.adj_list.len());
 
             for actor in all_actors {
                 if is_visited.get(actor).unwrap().eq(&IsVisited::_NO) {
-                    queue.push_front(graph.adj_list.get(actor).unwrap());
+                    graph::graph::Graph::bfs_helper(graph.adj_list.get_mut(actor).unwrap(), &mut is_visited);
+                }
+            }
+        }
 
-                    while !queue.is_empty() {
+        fn bfs_helper(graph: &mut Vec<&NodeData>, is_visited: &mut HashMap<String, IsVisited>) {
+            let mut queue = VecDeque::<&NodeData>::new();
 
-                        let tmp_node = queue.pop_back().unwrap();
+            // let all_actors = graph.adj_list.keys();
+            for node in graph {
+                queue.push_front(node);
+            }
 
-                        for movie in tmp_node {
+            queue.push_front(graph.adj_list.get(actor).unwrap());
 
-                             for movie_actor in movie.main_actors {
-                                 queue.push_front(graph.adj_list.get(&*movie_actor).unwrap()); // pushes movies that actors are in
-                                 
-                             }
-                        }
+            while !queue.is_empty() {
+                let tmp_node = queue.pop_back().unwrap();
+
+                for movie in tmp_node {
+                    for movie_actor in &movie.main_actors {
+                        queue.push_front(graph.adj_list.get(&*movie_actor).unwrap()); // pushes movies that actors are in
+                        let mut tmp_actor = is_visited.get_mut(movie_actor).unwrap();
+                        tmp_actor = &mut IsVisited::_YES;
                     }
                 }
-                // outermost for loop
-
             }
+
+            // outermost for loop
 
 
             //start at first node
-
-
 
 
             // let num_verts = graph.adj_list.len() ;
@@ -155,8 +154,7 @@ pub(crate) mod graph {
              */
         }
 
-        pub fn print_graph(graph: &Graph) { // todo: need to fix the data to graph issue (ex not a graph)
-
+        pub fn print_graph(graph: &Graph) {
             for (key, value) in graph.adj_list.iter() {
                 println!("Actor: {}", key);
                 for movie in value {

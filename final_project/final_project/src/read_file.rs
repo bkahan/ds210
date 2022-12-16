@@ -22,8 +22,7 @@ pub(crate) mod read_csv { // todo: modify for new csv file
 
             let csv_entry: Vec<&str> = record.get(3).unwrap().split(',').collect();
             for str in csv_entry {
-                let mut tmp = String::new();
-                tmp = str.clone().parse().unwrap();
+                let tmp = str.clone().parse().unwrap();
                 actors.push(tmp);
             }
 

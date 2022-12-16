@@ -119,9 +119,11 @@ Once I had created the graph data structure, I needed to make sure that it actua
 
 I wrote a simple function to print out each \texttt{NodeData} for each actor.  The function is called \texttt{fn print\_graph(graph: \&Graph)}
 
-\subsubsection{Breadth-First Search}
+\subsubsection{Breadth-First Search: Incomplete}
 
 I used the Wikipedia version of the pseudo-code to derive my own implementation of the search. I had to modify the pseudo-code as I (most likely) had a disconnected graph so the standard implementation would miss some vertices.  The function is called \texttt{fn bfs(graph: \&Graph)}
+
+I hinted about this above but this is where I failed to properly traverse the graph. The code that I have commented out will compile and run but it creates an infinite loop that I am unable to break out of. 
 
 \section{Conclusion}
 
@@ -131,7 +133,7 @@ I did not do nearly as much as I wanted to do on this project.  I know that I wi
 
 Since movies and thus, actors, are all time-series elements, there's an additional layer to the graph.  This is one aspect that continues to trouble my mind as the graph contains many different \textit{layers}, each of them unique.  
 
-All said, I accept my grade on this project and I hope to improve on my future projects. This project made it clear that I need to set more explicit (and realistic) time-lines. 
+All said, I accept my grade on this project and I hope to improve on my future projects as this is leaving me quite disappointed in myself.  This project made it clear that I need to set more explicit (and realistic) time-lines.  Throughout this semester, it became very clear to me that I prefer to work alone.  I know that many of problems would likely have been solved had I gone office hours and conversed with my classmates. 
 
 \subsection{Opinions on Rust}
 This class leaves me with questions regarding my own opinions on Rust in the data science space. I've concluded that I see the usefulness and necessity of a language like Rust but it's safety is also a hindrance.  I found that, while Rust creates fast code, it doesn't appear to be as suited as Python (\texttt{Numpy, SKLearn, Pandas)}, Julia, or R.  
