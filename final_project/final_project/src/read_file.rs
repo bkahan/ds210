@@ -37,9 +37,3 @@ pub(crate) mod read_csv { // todo: modify for new csv file
         Ok(tmp_res)
     }
 }
-
-/*
-new data structure for graph:
-graph is a hashmap (key = individual actor, value = vec<nodedata>)
-
- */

@@ -13,7 +13,7 @@ mod graph;
 
 fn main() {
     let path = "/Users/benkahan/Documents/School/ds210/final_project/final_project/data/data.csv";
-    //let path = "../data/data.csv";
+    //let path = "../data/data.csv"; // use for path relative to main.rs
 
     let csv_data = read_file::read_csv::file2node(path);
 
@@ -24,38 +24,7 @@ fn main() {
 
     graph::graph::Graph::print_graph(&mut graph);
 
-    graph::graph::Graph::bfs(&graph);
-
+    graph::graph::Graph::bfs(&mut graph);
 
 }
 
-/*
-
-proj:
-
-pt1: parse data
-read csv, init Graph (based on what??)
-insert data into Graph
-
-pt2: analyze data
-what Graph analysis can be done on this Graph?
-    how I choose for things to be connected matters
-
-q: what does each node hold? -> struct of data
-q: how are nodes connected?
-q: what defines connected?
-
-about Graph:
-- non directional
-- weighted by....
-
-Connect Graph by:
-- director?
-- main actors?
--
-
-
-
-
-
- */

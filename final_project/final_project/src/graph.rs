@@ -7,6 +7,7 @@ Collaborators: none
 */
 
 pub(crate) mod graph {
+    use std::borrow::BorrowMut;
     use std::collections::{HashMap, VecDeque};
     use std::hash::Hash;
     use std::ops::{Deref};
@@ -59,11 +60,19 @@ pub(crate) mod graph {
         pub fn bfs(graph: &mut Graph) {
             let all_actors = graph.adj_list.keys();
 
-            let mut is_visited: HashMap<String, IsVisited> = HashMap::with_capacity(graph.adj_list.len());
+            let mut actors = Vec::<&String>::new();
 
-            for actor in all_actors {
+            for a in all_actors {
+                actors.push(a);
+            }
+
+            let num = graph.adj_list.len();
+
+            let mut is_visited: HashMap<String, IsVisited> = HashMap::with_capacity(num);
+
+            for actor in actors {
                 if is_visited.get(actor).unwrap().eq(&IsVisited::_NO) {
-                    graph::graph::Graph::bfs_helper(graph.adj_list.get_mut(actor).unwrap(), &mut is_visited);
+                    //graph::graph::Graph::bfs_helper(&mut graph.adj_list.get_mut(&*actor).unwrap(), &mut is_visited);
                 }
             }
         }
@@ -78,13 +87,18 @@ pub(crate) mod graph {
             while !queue.is_empty() {
                 let tmp_node = queue.pop_back().unwrap();
 
-                for movie in tmp_node {
-                    for movie_actor in &movie.main_actors {
-                        queue.push_front(graph.adj_list.get(&*movie_actor).unwrap()); // pushes movies that actors are in
-                        let mut tmp_actor = is_visited.get_mut(movie_actor).unwrap();
-                        tmp_actor = &mut IsVisited::_YES;
-                    }
+                for actors in &tmp_node.main_actors {
+                    let mut tmp_actor = is_visited.get_mut(&*actors).unwrap();
+                    tmp_actor = &mut IsVisited::_YES;
+
+
+
+                    // for movie_actor in &movie.main_actors {
+                    //     queue.push_front(graph.adj_list.get(&*movie_actor).unwrap()); // pushes movies that actors are in
+                    //
+                    // }
                 }
+                println!("{}", tmp_node.movie_title);
             }
         }
 
