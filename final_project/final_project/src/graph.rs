@@ -71,12 +71,9 @@ pub(crate) mod graph {
         fn bfs_helper(graph: &mut Vec<&NodeData>, is_visited: &mut HashMap<String, IsVisited>) {
             let mut queue = VecDeque::<&NodeData>::new();
 
-            // let all_actors = graph.adj_list.keys();
             for node in graph {
                 queue.push_front(node);
             }
-
-            queue.push_front(graph.adj_list.get(actor).unwrap());
 
             while !queue.is_empty() {
                 let tmp_node = queue.pop_back().unwrap();
@@ -89,69 +86,6 @@ pub(crate) mod graph {
                     }
                 }
             }
-
-            // outermost for loop
-
-
-            //start at first node
-
-
-            // let num_verts = graph.adj_list.len() ;
-            //
-            // let mut queue = VecDeque::<&LinkedList<&NodeData>>::new();
-            //
-            // let mut is_visited : Vec<IsVisited> = vec![Default::default() ; num_verts];
-            //
-            // for (key, value) in graph.adj_list.iter() {
-            //     println!("Actor: {}", key);
-            //     for movie in value {
-            //         println!("Movie Title: {}", movie.movie_title)
-            //     }
-            //     println!();
-            // }
-
-            // for vert in 0..num_verts {
-            //
-            //     if *is_visited.get(vert).unwrap() == IsVisited::_NO {
-            //
-            //         queue.push_front(&graph.adj_list[vert]);
-            //         is_visited[vert] = IsVisited::_YES;q
-            //
-            //         while !queue.is_empty() {
-            //             let mut tmp = queue.pop_back().unwrap();
-            //
-            //             for node in tmp {
-            //                 println!("Movie Title: {}", node.movie_title)
-            //             }
-            //             println!();
-            //
-            //         }
-            //     }
-            //
-            // }
-
-            /*
-
-            from wikipedia: https://en.wikipedia.org/wiki/Breadth-first_search
-            using to my implementation
-
-                Input: A graph G and a starting vertex root of G
-
-                Output: Goal state. The parent links trace the shortest path back to root[8]
-
-                 1  procedure BFS(G, root) is
-                 2      let Q be a queue
-                 3      label root as explored
-                 4      Q.enqueue(root)
-                 5      while Q is not empty do
-                 6          v := Q.dequeue()
-                 9          for all edges from v to w in G.adjacentEdges(v) do
-                10              if w is not labeled as explored then
-                11                  label w as explored
-                12                  w.parent := v
-                13                  Q.enqueue(w)
-
-             */
         }
 
         pub fn print_graph(graph: &Graph) {
