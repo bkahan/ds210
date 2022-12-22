@@ -33,7 +33,7 @@ From Wikipedia: Using a Priority Queue
 4      create vertex priority queue Q
 5
 6      for each vertex v in Graph.Vertices:
-7          if v ≠ source
+7          if v != source
 8              dist[v] ← INFINITY                 // Unknown distance from source to v
 9              prev[v] ← UNDEFINED                // Predecessor of v
 10
@@ -114,12 +114,12 @@ procedure DFS_iterative(G, v) is
 
 ```
 algorithm Kruskal(G) is
-    F:= ∅
-    for each v ∈ G.V do
+    F:= {}
+    for each v in G.V do
         MAKE-SET(v)
     for each (u, v) in G.E ordered by weight(u, v), increasing do
-        if FIND-SET(u) ≠ FIND-SET(v) then
-            F:= F ∪ {(u, v)} ∪ {(v, u)}
+        if FIND-SET(u) != FIND-SET(v) then
+            F:= F U {(u, v)} U {(v, u)}
             UNION(FIND-SET(u), FIND-SET(v))
     return F
 ```
